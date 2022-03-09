@@ -9,6 +9,7 @@
 #include <mavros_msgs/State.h>
 #include <nav_msgs/Odometry.h>
 #include <vector>
+#include <tf/LinearMath/Matrix3x3.h>
 
 nav_msgs::Odometry current_pose_g;
 

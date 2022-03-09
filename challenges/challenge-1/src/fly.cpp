@@ -41,14 +41,18 @@ int main(int argc, char **argv) {
     land_cmd.request.altitude = 0;
 
     // Waypoints
+    tf::Quaternion q;
+    q.setRPY(0, 0, 1.570796);
     geometry_msgs::PoseStamped pose1;
     pose1.pose.position.x = 0;
     pose1.pose.position.y = 0;
     pose1.pose.position.z = 6;
+    pose1.orientation = q;
     geometry_msgs::PoseStamped pose2;
     pose2.pose.position.x = 0;
     pose2.pose.position.y = 30;
     pose2.pose.position.z = 6;
+    pose2.orientation = q;
 
     std::vector<geometry_msgs::PoseStamped*> goals;
     goals.push_back(&pose1);
