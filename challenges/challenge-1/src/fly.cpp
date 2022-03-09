@@ -11,6 +11,7 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "offb_node");
     ros::NodeHandle nh;
 
+    // Establish subscribers
     ros::Subscriber state_sub = nh.subscribe<mavros_msgs::State>
             ("mavros/state", 10, state_cb);
     ros::Subscriber pose_sub = nh.subscribe<nav_msgs::Odometry>
@@ -43,16 +44,17 @@ int main(int argc, char **argv) {
     // Waypoints
     tf::Quaternion q;
     q.setRPY(0, 0, 1.570796);
+
     geometry_msgs::PoseStamped pose1;
     pose1.pose.position.x = 0;
     pose1.pose.position.y = 0;
     pose1.pose.position.z = 6;
-    pose1.orientation = q;
+    quaternionTFToMsg(q, pose1.pose.orientation);
     geometry_msgs::PoseStamped pose2;
     pose2.pose.position.x = 0;
-    pose2.pose.position.y = 30;
+    pose2.pose.position.y = 27.432;
     pose2.pose.position.z = 6;
-    pose2.orientation = q;
+    quaternionTFToMsg(q, pose2.pose.orientation);
 
     std::vector<geometry_msgs::PoseStamped*> goals;
     goals.push_back(&pose1);
@@ -76,9 +78,9 @@ int main(int argc, char **argv) {
     ros::Time last_request = ros::Time::now();
     int cur_goal_idx = 0;
 
-    //bool missionDone = false;
+    bool missionDone = false;
 
-    while(ros::ok()){
+    while(ros::ok() && !missionDone){
         if( current_state.mode != "OFFBOARD" &&
             (ros::Time::now() - last_request > ros::Duration(5.0))){
             if( set_mode_client.call(offb_set_mode) &&
@@ -103,14 +105,12 @@ int main(int argc, char **argv) {
 	    cur_goal_idx++;	
 	    if(cur_goal_idx >= goals.size()) {
 		    ROS_INFO("Landing");
-		    //land();
 		    while (!(land_client.call(land_cmd) && land_cmd.response.success)) {
 		      //local_pos_pub.publish(pose);
-		      ROS_INFO("tring to land");
 		      ros::spinOnce();
 		      rate.sleep();
     		    }
-		    //missionDone = true;
+		    missionDone = true;
 	    }
 	}
 
@@ -120,3 +120,4 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+

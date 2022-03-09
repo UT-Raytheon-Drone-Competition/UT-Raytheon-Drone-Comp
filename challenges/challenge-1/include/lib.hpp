@@ -10,6 +10,7 @@
 #include <nav_msgs/Odometry.h>
 #include <vector>
 #include <tf/LinearMath/Matrix3x3.h>
+#include <tf/transform_datatypes.h>
 
 nav_msgs::Odometry current_pose_g;
 
