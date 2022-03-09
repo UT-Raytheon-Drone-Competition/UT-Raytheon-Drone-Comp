@@ -1,0 +1,5 @@
+<launch>
+        <!-- Launch MAVROS -->
+        <include file="$(find local_planner)/launch/local_planner_depth-camera.launch"/>
+        <node pkg="challenge-1" name="challenge-1_node" type="challenge-1_node" />
+</launch>
