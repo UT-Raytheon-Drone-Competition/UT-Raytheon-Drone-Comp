@@ -10,10 +10,15 @@ project(challenge-1)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   mavros_msgs
+  sensor_msgs
   nav_msgs
   roscpp
   std_msgs
+  cv_bridge
+  std_msgs
+  image_transport
 )
+find_package( OpenCV REQUIRED )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -150,6 +155,7 @@ add_executable(${PROJECT_NAME}_node src/fly.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 #############
