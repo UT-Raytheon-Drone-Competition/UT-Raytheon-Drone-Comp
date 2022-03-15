@@ -1,16 +1,23 @@
 #ifndef GNC_FUNCTIONS
 #define GNC_FUNCTIONS
 
-#include <ros/ros.h> 
-#include <geometry_msgs/PoseStamped.h> 
-#include <mavros_msgs/CommandTOL.h>
+#include <ros/ros.h>
 #include <mavros_msgs/CommandBool.h> 
+#include <mavros_msgs/CommandTOL.h>
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/State.h>
+#include <geometry_msgs/PoseStamped.h> 
 #include <nav_msgs/Odometry.h>
 #include <vector>
 #include <tf/LinearMath/Matrix3x3.h>
 #include <tf/transform_datatypes.h>
+#include <sensor_msgs/Image.h>
+
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui.hpp>
 
 nav_msgs::Odometry current_pose_g;
 
@@ -46,3 +53,4 @@ void pos_callback(const nav_msgs::Odometry::ConstPtr& msg) {
 }
 
 #endif //GNC_FUNCTIONS
+

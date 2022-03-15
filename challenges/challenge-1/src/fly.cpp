@@ -1,23 +1,75 @@
 #include "lib.hpp"
 
 mavros_msgs::State current_state;
+sensor_msgs::Image current_img;
 
-void state_cb(const mavros_msgs::State::ConstPtr& msg){
+void state_callback(const mavros_msgs::State::ConstPtr& msg){
     current_state = *msg;
 }
 
-int main(int argc, char **argv) {
+static const std::string OPENCV_WINDOW = "Image window";
 
+class ImageConverter
+{
+  ros::NodeHandle nh_;
+  image_transport::ImageTransport it_;
+  image_transport::Subscriber image_sub_;
+  image_transport::Publisher image_pub_;
+
+public:
+  ImageConverter()
+    : it_(nh_)
+  {
+    // Depth camera
+    image_sub_ = it_.subscribe("/camera/rgb/image_raw", 1, &ImageConverter::imageCb, this);
+    // Downward camera
+    //image_sub_ = it_.subscribe("/rrbot/camera1/image_raw", 1, &ImageConverter::imageCb, this);
+    image_pub_ = it_.advertise("/offb_node/output_video", 1);
+    cv::namedWindow(OPENCV_WINDOW);
+  }
+
+  ~ImageConverter()
+  {
+    cv::destroyWindow(OPENCV_WINDOW);
+  }
+
+  void imageCb(const sensor_msgs::ImageConstPtr& msg)
+  {
+    cv_bridge::CvImagePtr cv_ptr;
+    try
+    {
+      cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+    }
+    catch (cv_bridge::Exception& e)
+    {
+      ROS_ERROR("cv_bridge exception: %s", e.what());
+      return;
+    }
+
+    // Update GUI Window
+    cv::imshow(OPENCV_WINDOW, cv_ptr->image);
+    cv::waitKey(3);
+
+    // Output modified video stream
+    image_pub_.publish(cv_ptr->toImageMsg());
+  }
+};
+
+int main(int argc, char **argv) {
     ros::init(argc, argv, "offb_node");
+    ImageConverter ic;
+
     ros::NodeHandle nh;
 
-    // Establish subscribers
+    // Establish subscribers, publishers, and service client
     ros::Subscriber state_sub = nh.subscribe<mavros_msgs::State>
-            ("mavros/state", 10, state_cb);
+            ("mavros/state", 10, state_callback);
     ros::Subscriber pose_sub = nh.subscribe<nav_msgs::Odometry>
-            ("mavros/global_position/local", 10, pos_callback);
+            ("mavros/odometry/in", 10, pos_callback);
+
     ros::Publisher local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>
             ("mavros/setpoint_position/local", 10);
+
     ros::ServiceClient arming_client = nh.serviceClient<mavros_msgs::CommandBool>
             ("mavros/cmd/arming");
     ros::ServiceClient land_client = nh.serviceClient<mavros_msgs::CommandTOL>
@@ -80,27 +132,24 @@ int main(int argc, char **argv) {
 
     bool missionDone = false;
 
-    while(ros::ok() && !missionDone){
-        if( current_state.mode != "OFFBOARD" &&
-            (ros::Time::now() - last_request > ros::Duration(5.0))){
-            if( set_mode_client.call(offb_set_mode) &&
-                offb_set_mode.response.mode_sent){
+    while(ros::ok() && !missionDone) {
+
+	// Switch to offboard mode
+        if(current_state.mode != "OFFBOARD" && (ros::Time::now() - last_request > ros::Duration(5.0))) {
+            if(set_mode_client.call(offb_set_mode) && offb_set_mode.response.mode_sent)
                 ROS_INFO("Offboard enabled");
-            }
             last_request = ros::Time::now();
+	// Arm drone
         } else {
-            if( !current_state.armed &&
-                (ros::Time::now() - last_request > ros::Duration(5.0))){
-                if( arming_client.call(arm_cmd) &&
-                    arm_cmd.response.success){
+            if(!current_state.armed && (ros::Time::now() - last_request > ros::Duration(5.0))) {
+                if(arming_client.call(arm_cmd) && arm_cmd.response.success)
                     ROS_INFO("Vehicle armed");
-                }
                 last_request = ros::Time::now();
             }
         }
 
         local_pos_pub.publish(*(goals[cur_goal_idx]));
-	if(check_waypoint_reached(*(goals[cur_goal_idx]))){
+	if(check_waypoint_reached(*(goals[cur_goal_idx]))) {
 	    ROS_INFO_STREAM("Waypoint" << cur_goal_idx << " reached");
 	    cur_goal_idx++;	
 	    if(cur_goal_idx >= goals.size()) {
