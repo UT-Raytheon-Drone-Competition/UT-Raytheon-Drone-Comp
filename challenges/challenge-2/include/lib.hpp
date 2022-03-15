@@ -13,12 +13,6 @@
 #include <tf/transform_datatypes.h>
 #include <sensor_msgs/Image.h>
 
-#include <image_transport/image_transport.h>
-#include <cv_bridge/cv_bridge.h>
-#include <sensor_msgs/image_encodings.h>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui.hpp>
-
 nav_msgs::Odometry current_pose_g;
 
 bool check_waypoint_reached(geometry_msgs::PoseStamped goal, float pos_tolerance=1, float heading_tolerance=0.01) {

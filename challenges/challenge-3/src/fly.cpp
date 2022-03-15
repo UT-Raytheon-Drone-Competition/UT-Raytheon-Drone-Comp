@@ -50,32 +50,18 @@ int main(int argc, char **argv) {
     geometry_msgs::PoseStamped pose1;
     pose1.pose.position.x = 0;
     pose1.pose.position.y = 0;
-    pose1.pose.position.z = 6;
+    pose1.pose.position.z = 1.2;
     quaternionTFToMsg(q, pose1.pose.orientation);
-/*
-    std::vector<geometry_msgs::PoseStamped*> goals;
-    goals.push_back(&pose1);
 
-    for (int i = 1; i < 28; i++) {
-        geometry_msgs::PoseStamped pose;
-        pose.pose.position.x = 0;
-        pose.pose.position.y = 0;
-        pose.pose.position.z = 6;
-        quaternionTFToMsg(q, pose.pose.orientation);
-	goals.push_back(&pose);
-    }
-*/
-/*
     geometry_msgs::PoseStamped pose2;
     pose2.pose.position.x = 0;
-    pose2.pose.position.y = 27.432;
-    pose2.pose.position.z = 6;
+    pose2.pose.position.y = 45;
+    pose2.pose.position.z = 1.2;
     quaternionTFToMsg(q, pose2.pose.orientation);
 
     std::vector<geometry_msgs::PoseStamped*> goals;
     goals.push_back(&pose1);
     goals.push_back(&pose2);
-*/
 
     // Send a few setpoints before starting
     for(int i = 100; ros::ok() && i > 0; --i){
@@ -114,24 +100,6 @@ int main(int argc, char **argv) {
             }
         }
 
-	geometry_msgs::PoseStamped pose;
-        pose.pose.position.x = 0;
-        pose.pose.position.y = ypos;
-        pose.pose.position.z = 6;
-        quaternionTFToMsg(q, pose.pose.orientation);
-
-	local_pos_pub.publish(pose);
-	if(check_waypoint_reached(pose)) {
-	    ROS_INFO_STREAM("Waypoint" << ypos << " reached");
-	    ypos++;	
-	    if(ypos > 27) {
-		    ROS_INFO("Landing");
-		    land_client.call(land_cmd);
-		    missionDone = true;
-	    }
-	}
-
-/*
         local_pos_pub.publish(*(goals[cur_goal_idx]));
 	if(check_waypoint_reached(*(goals[cur_goal_idx]))) {
 	    ROS_INFO_STREAM("Waypoint" << cur_goal_idx << " reached");
@@ -142,7 +110,6 @@ int main(int argc, char **argv) {
 		    missionDone = true;
 	    }
 	}
-*/
 
         ros::spinOnce();
         rate.sleep();
