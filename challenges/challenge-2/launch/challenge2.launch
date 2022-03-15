@@ -1,0 +1,14 @@
+<launch>
+        <!-- Launch file for challenge 2-->
+        <arg name="fcu_url" default="/dev/ttyUSB0:921600"/>
+        <!-- Launch MAVROS -->
+        <include file="$(find mavros)/launch/px4.launch">
+                <!-- GCS link is provided by SITL -->
+                <!-- <arg name="gcs_url" value=""/> -->
+                <arg name="fcu_url" value="$(arg fcu_url)"/>
+                <arg name="respawn_mavros" value="$(arg respawn_mavros)"/>
+        </include>
+        <!-- Launch ZED -->
+        <include file="$(find zed_wrapper)/launch/zed2.launch"/>
+        <node pkg="challenge-2" name="challenge-2_node" type="challenge-2_node" />
+</launch>

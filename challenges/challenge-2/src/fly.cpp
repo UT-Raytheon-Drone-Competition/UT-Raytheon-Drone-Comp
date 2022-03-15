@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
     land_cmd.request.longitude = 0;
     land_cmd.request.altitude = 0;
 
-    // Waypoints
+    // Waypoints (make U-shape survey)
     tf::Quaternion q;
     q.setRPY(0, 0, 1.570796);
 
@@ -102,15 +102,30 @@ int main(int argc, char **argv) {
     pose1.pose.position.y = 0;
     pose1.pose.position.z = 6;
     quaternionTFToMsg(q, pose1.pose.orientation);
+
     geometry_msgs::PoseStamped pose2;
     pose2.pose.position.x = 0;
-    pose2.pose.position.y = 27.432;
+    pose2.pose.position.y = 43;
     pose2.pose.position.z = 6;
     quaternionTFToMsg(q, pose2.pose.orientation);
+
+    geometry_msgs::PoseStamped pose3;
+    pose3.pose.position.x = 16;
+    pose3.pose.position.y = 43;
+    pose3.pose.position.z = 6;
+    quaternionTFToMsg(q, pose3.pose.orientation);
+
+    geometry_msgs::PoseStamped pose4;
+    pose4.pose.position.x = 16;
+    pose4.pose.position.y = 0;
+    pose4.pose.position.z = 6;
+    quaternionTFToMsg(q, pose4.pose.orientation);
 
     std::vector<geometry_msgs::PoseStamped*> goals;
     goals.push_back(&pose1);
     goals.push_back(&pose2);
+    goals.push_back(&pose3);
+    goals.push_back(&pose4);
 
     // Send a few setpoints before starting
     for(int i = 100; ros::ok() && i > 0; --i){
