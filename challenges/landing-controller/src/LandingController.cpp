@@ -3,7 +3,7 @@
 LandingController::LandingController(ros::NodeHandle& nh, bool line){
     landOnLine = line;
     rcvdFirstAltitudeMsg = false;
-    altitude_sub = nh.subscribe<sensor_msgs::Range>("/mavros/distance_sensor/TODO", 1, 
+    altitude_sub = nh.subscribe<sensor_msgs::Range>("/mavros/distance_sensor/TODO", 1, // hrlv_ez4_pub, laser_1_sub, lidarlite_pub, sonar_1_sub
                     &LandingController::altitude_cb, this);
     image_sub = nh.subscribe<sensor_msgs::Image>("/rrbot/camera1/image_raw",1,
                     &LandingController::image_cb, this);
