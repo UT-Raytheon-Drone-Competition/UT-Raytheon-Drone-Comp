@@ -19,14 +19,11 @@ void LandingController::altitude_cb(const sensor_msgs::Range::ConstPtr& msg){
     }
 }
 
-void LandingController::image_cb(const sensor_msgs::Image::ConstPtr& msg){
+void LandingController::update(double x_error, double y_error){
     if(!rcvdFirstAltitudeMsg){
         return;
     }
     // Find location of line/marker
-    // TODO: find error from image
-    x_error = 0;
-    y_error = 0;
     error_norm = sqrt(x_error, y_error);
     if(altitude < LAND_HEIGHT && error_norm < ERROR_THRESHOLD){
         land_client.call(landCmd);

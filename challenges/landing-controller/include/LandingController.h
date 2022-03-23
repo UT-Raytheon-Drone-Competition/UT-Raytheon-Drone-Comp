@@ -17,14 +17,13 @@ private:
     bool rcvdFirstAltitudeMsg;
     mavros_msgs::CommandTOL landCmd;
     ros::Subscriber altitude_sub;
-    ros::Subscriber image_sub;
     ros::Publisher velocity_pub;
     ros::ServiceClient land_client;
 
 public:
     LandingController(ros::NodeHandle& nh, bool line);
     void altitude_cb(const sensor_msgs::Range::ConstPtr& msg);
-    void image_cb(const sensor_msgs::Image::ConstPtr& msg);
+    void update(double x_error, double y_error);
 }
 
 #endif
