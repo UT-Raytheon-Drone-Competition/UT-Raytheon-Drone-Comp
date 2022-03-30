@@ -1,8 +1,9 @@
 #include "LandingController.h"
 
-LandingController::LandingController(ros::NodeHandle& nh, bool line){
+LandingController::LandingController(ros::NodeHandle& nh){
     landOnLine = line;
     rcvdFirstAltitudeMsg = false;
+    done = false;
     altitude_sub = nh.subscribe<sensor_msgs::Range>("/sonar", 1,
                     &LandingController::altitude_cb, this);
     image_sub = nh.subscribe<sensor_msgs::Image>("/rrbot/camera1/image_raw",1,
@@ -27,6 +28,7 @@ void LandingController::update(double x_error, double y_error){
     error_norm = sqrt(x_error, y_error);
     if(altitude < LAND_HEIGHT && error_norm < ERROR_THRESHOLD){
         land_client.call(landCmd);
+        done = true;
         return;
     }
     // Send velocity command to mavros, where z velocity is DESCENT_RATE, and x/y velocity is a function of the offset of the line/marker from the center of the image
@@ -36,4 +38,8 @@ void LandingController::update(double x_error, double y_error){
     vel_cmd.linear.y = XY_GAIN*y_error;
     vel_cmd.linear.z = DESCENT_RATE;
     velocity_pub.publish(vel_cmd);
+}
+
+bool LandingController::landed(){
+    return done;
 }

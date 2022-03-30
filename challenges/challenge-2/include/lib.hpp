@@ -12,6 +12,8 @@
 #include <tf/LinearMath/Matrix3x3.h>
 #include <tf/transform_datatypes.h>
 #include <sensor_msgs/Image.h>
+#include <apriltag_ros/AprilTagDetection.h>
+#include <landing-controller/LandingController.h>
 
 nav_msgs::Odometry current_pose_g;
 
@@ -45,6 +47,65 @@ bool check_waypoint_reached(geometry_msgs::PoseStamped goal, float pos_tolerance
 void pos_callback(const nav_msgs::Odometry::ConstPtr& msg) {
     current_pose_g = *msg;
 }
+
+class TagTracker{
+
+private:
+    ros::NodeHandle* n;
+    int consecutive_frames;
+    int missed_frames;
+    bool timeToLand;
+    ros::Subscriber downward_april_sub;
+    double x_error;
+    double y_error;
+public:
+    TagTracker(ros::NodeHandle* nh):
+        n(nh), consecutive_frames(0), missed_frames(0), timeToLand(false)
+    {
+        downward_april_sub = nh->subscribe<apriltag_ros::AprilTagDetectionArray>
+            ("/tag_detections", 1, &TagTracker::downward_april_callback, this);
+    }
+    void downward_april_callback(const apriltag_ros::AprilTagDetectionArray::ConstPtr& msg){
+        if(timeToLand){
+            for(auto& detection : msg->detections){
+                if(true){ // TODO: CHeck id of apriltag
+                    x_error = detection.pose.pose.pose.position.x; // TODO: Check coordinate axes
+                    y_error = detection.pose.pose.pose.position.y; // TODO: scale these errors accordingly
+                    return;
+                }
+            }
+            // set error to 0 if undetected to prevent drift
+            x_error = 0;
+            y_error = 0;
+        }
+        if(msg->detections.size() > 0 && true){
+            // TODO: Check the id of the Apriltag above
+            consecutive_frames++;
+            if(consecutive_frames > 100){
+                timeToLand = true;
+            }
+        }else{
+            missed_frames++;
+            if(missed_frames > 5){
+                missed_frames = 0;
+                consecutive_frames = 0;
+            }
+        }
+    }
+    bool checkTimeToLand(){
+        return timeToLand;
+    }
+    void startLanding(ros::Rate& rate){
+        ROS_INFO("Found tag, starting landing");
+        LandingController lander(*n);
+        while(!lander.done()){
+            lander.update(x_error, y_error);
+            ros::spinOnce();
+            rate.sleep();
+        }
+    }
+}
+
 
 #endif //GNC_FUNCTIONS
 

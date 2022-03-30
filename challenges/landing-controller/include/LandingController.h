@@ -13,15 +13,15 @@
 class LandingController{
 private:
     float altitude;
-    bool landOnLine; // False if we are landing on ARUCO
     bool rcvdFirstAltitudeMsg;
     mavros_msgs::CommandTOL landCmd;
     ros::Subscriber altitude_sub;
     ros::Publisher velocity_pub;
     ros::ServiceClient land_client;
+    bool done;
 
 public:
-    LandingController(ros::NodeHandle& nh, bool line);
+    LandingController(ros::NodeHandle& nh);
     void altitude_cb(const sensor_msgs::Range::ConstPtr& msg);
     void update(double x_error, double y_error);
 }

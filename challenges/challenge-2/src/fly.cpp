@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
             ("mavros/set_mode");
 
     // The setpoint publishing rate MUST be faster than 2Hz
-    ros::Rate rate(20.0);
+    ros::Rate rate(100.0);
 
     // Wait for FCU connection
     while(ros::ok() && !current_state.connected){
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     // Waypoints (make U-shape survey)
     tf::Quaternion q;
     q.setRPY(0, 0, 1.570796);
-
+    // TODO: Create search path
     geometry_msgs::PoseStamped pose1;
     pose1.pose.position.x = 0;
     pose1.pose.position.y = 0;
@@ -96,7 +96,8 @@ int main(int argc, char **argv) {
     int cur_goal_idx = 0;
 
     bool missionDone = false;
-
+    TagTracker tracker(&nh);
+    bool landingStarted = false;
     while(ros::ok() && !missionDone) {
 
 	// Switch to offboard mode
@@ -112,17 +113,22 @@ int main(int argc, char **argv) {
                 last_request = ros::Time::now();
             }
         }
-
-        local_pos_pub.publish(*(goals[cur_goal_idx]));
-	if(check_waypoint_reached(*(goals[cur_goal_idx]))) {
-	    ROS_INFO_STREAM("Waypoint" << cur_goal_idx << " reached");
-	    cur_goal_idx++;	
-	    if(cur_goal_idx >= goals.size()) {
-		    ROS_INFO("Landing");
-		    land_client.call(land_cmd);
-		    missionDone = true;
-	    }
-	}
+        if(tracker.checkTimeToLand()){
+            tracker.startLanding();
+            missionDone = true;
+        }
+        else{
+            local_pos_pub.publish(*(goals[cur_goal_idx]));
+            if(check_waypoint_reached(*(goals[cur_goal_idx]))) {
+                ROS_INFO_STREAM("Waypoint" << cur_goal_idx << " reached");
+                cur_goal_idx++;	
+                if(cur_goal_idx >= goals.size()) {
+                    ROS_INFO("Landing");
+                    land_client.call(land_cmd);
+                    missionDone = true;
+                }
+            }
+        }
 
         ros::spinOnce();
         rate.sleep();

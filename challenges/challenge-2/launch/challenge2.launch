@@ -10,5 +10,14 @@
         </include>
         <!-- Launch ZED -->
         <include file="$(find zed_wrapper)/launch/zed2.launch"/>
+        <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+            <param name="video_device" value="/dev/video0" />
+            <param name="image_width" value="640" />
+            <param name="image_height" value="480" />
+            <param name="pixel_format" value="yuyv" />
+            <param name="camera_frame_id" value="usb_cam" />
+            <param name="io_method" value="mmap"/>
+        </node>
+        <include file="$(find apriltags2_ros)/launch/continuous_detection.launch"/>
         <node pkg="challenge-2" name="challenge-2_node" type="challenge-2_node" />
 </launch>
