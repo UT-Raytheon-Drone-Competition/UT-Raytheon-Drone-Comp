@@ -97,52 +97,47 @@ int main(int argc, char **argv) {
     int ypos = 0;
 
     bool missionDone = false;
+    bool landing = false;
+    LandingController lander(nh, 1); // TODO: tune xy gain
 
     while(ros::ok() && !missionDone) {
-
-	// Switch to offboard mode
-        if(current_state.mode != "OFFBOARD" && (ros::Time::now() - last_request > ros::Duration(5.0))) {
-            if(set_mode_client.call(offb_set_mode) && offb_set_mode.response.mode_sent)
-                ROS_INFO("Offboard enabled");
-            last_request = ros::Time::now();
-	// Arm drone
-        } else {
-            if(!current_state.armed && (ros::Time::now() - last_request > ros::Duration(5.0))) {
-                if(arming_client.call(arm_cmd) && arm_cmd.response.success)
-                    ROS_INFO("Vehicle armed");
+        if(!landing){
+        // Switch to offboard mode
+            if(current_state.mode != "OFFBOARD" && (ros::Time::now() - last_request > ros::Duration(5.0))) {
+                if(set_mode_client.call(offb_set_mode) && offb_set_mode.response.mode_sent)
+                    ROS_INFO("Offboard enabled");
                 last_request = ros::Time::now();
+        // Arm drone
+            } else {
+                if(!current_state.armed && (ros::Time::now() - last_request > ros::Duration(5.0))) {
+                    if(arming_client.call(arm_cmd) && arm_cmd.response.success)
+                        ROS_INFO("Vehicle armed");
+                    last_request = ros::Time::now();
+                }
+            }
+
+            geometry_msgs::PoseStamped pose;
+                pose.pose.position.x = 0;
+                pose.pose.position.y = ypos;
+                pose.pose.position.z = 6;
+                quaternionTFToMsg(q, pose.pose.orientation);
+
+            local_pos_pub.publish(pose);
+            if(check_waypoint_reached(pose)) {
+                ROS_INFO_STREAM("Waypoint" << ypos << " reached");
+                ypos++;	
+                if(ypos > 27) {
+                    ROS_INFO("Landing");
+                    landing = true;
+                }
             }
         }
-
-	geometry_msgs::PoseStamped pose;
-        pose.pose.position.x = 0;
-        pose.pose.position.y = ypos;
-        pose.pose.position.z = 6;
-        quaternionTFToMsg(q, pose.pose.orientation);
-
-	local_pos_pub.publish(pose);
-	if(check_waypoint_reached(pose)) {
-	    ROS_INFO_STREAM("Waypoint" << ypos << " reached");
-	    ypos++;	
-	    if(ypos > 27) {
-		    ROS_INFO("Landing");
-		    land_client.call(land_cmd);
-		    missionDone = true;
-	    }
-	}
-
-/*
-        local_pos_pub.publish(*(goals[cur_goal_idx]));
-	if(check_waypoint_reached(*(goals[cur_goal_idx]))) {
-	    ROS_INFO_STREAM("Waypoint" << cur_goal_idx << " reached");
-	    cur_goal_idx++;	
-	    if(cur_goal_idx >= goals.size()) {
-		    ROS_INFO("Landing");
-		    land_client.call(land_cmd);
-		    missionDone = true;
-	    }
-	}
-*/
+        else{
+            lander.update(0,0);
+            if(lander.landed()){
+                missionDone = true;
+            }
+        }
 
         ros::spinOnce();
         rate.sleep();

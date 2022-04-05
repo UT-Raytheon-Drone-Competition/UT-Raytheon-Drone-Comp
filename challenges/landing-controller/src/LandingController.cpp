@@ -1,6 +1,6 @@
 #include "LandingController.h"
 
-LandingController::LandingController(ros::NodeHandle& nh){
+LandingController::LandingController(ros::NodeHandle& nh, double xy_gain){
     landOnLine = line;
     rcvdFirstAltitudeMsg = false;
     done = false;
@@ -11,6 +11,7 @@ LandingController::LandingController(ros::NodeHandle& nh){
     velocity_pub = nh.advertise<geometry_msgs::Twist>("/mavros/setpoint_velocity/cmd_vel_unstamped",1);
     land_client = nh.serviceClient<mavros_msgs::CommandTOL>("mavros/cmd/land");
     land_client.waitForExistence(ros::Duration(0.5));
+    this->xy_gain = xy_gain;
 }
 
 void LandingController::altitude_cb(const sensor_msgs::Range::ConstPtr& msg){
@@ -34,8 +35,8 @@ void LandingController::update(double x_error, double y_error){
     // Send velocity command to mavros, where z velocity is DESCENT_RATE, and x/y velocity is a function of the offset of the line/marker from the center of the image
     geometry_msgs::Twist vel_cmd;
     
-    vel_cmd.linear.x = XY_GAIN*x_error;
-    vel_cmd.linear.y = XY_GAIN*y_error;
+    vel_cmd.linear.x = xy_gain*x_error;
+    vel_cmd.linear.y = xy_gain*y_error;
     vel_cmd.linear.z = DESCENT_RATE;
     velocity_pub.publish(vel_cmd);
 }

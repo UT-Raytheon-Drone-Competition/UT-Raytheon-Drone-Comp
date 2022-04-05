@@ -19,11 +19,13 @@ private:
     ros::Publisher velocity_pub;
     ros::ServiceClient land_client;
     bool done;
+    double xy_gain;
 
 public:
-    LandingController(ros::NodeHandle& nh);
+    LandingController(ros::NodeHandle& nh, double xy_gain);
     void altitude_cb(const sensor_msgs::Range::ConstPtr& msg);
     void update(double x_error, double y_error);
+    bool landed();
 }
 
 #endif

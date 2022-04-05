@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   nav_msgs
   roscpp
+  landing-controller
 )
 
 ## System dependencies are found with CMake's conventions

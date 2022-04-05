@@ -97,7 +97,7 @@ public:
     }
     void startLanding(ros::Rate& rate){
         ROS_INFO("Found tag, starting landing");
-        LandingController lander(*n);
+        LandingController lander(*n, 1);// TODO: tune xy_gains
         while(!lander.done()){
             lander.update(x_error, y_error);
             ros::spinOnce();
