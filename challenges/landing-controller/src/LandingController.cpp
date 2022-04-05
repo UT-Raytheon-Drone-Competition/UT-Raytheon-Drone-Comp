@@ -1,6 +1,7 @@
 #include "LandingController.h"
 
 LandingController::LandingController(ros::NodeHandle& nh, double xy_gain){
+
     rcvdFirstAltitudeMsg = false;
     done = false;
     altitude_sub = nh.subscribe<sensor_msgs::Range>("/sonar", 1,
@@ -11,20 +12,19 @@ LandingController::LandingController(ros::NodeHandle& nh, double xy_gain){
     this->xy_gain = xy_gain;
 }
 
-void LandingController::altitude_cb(const sensor_msgs::Range::ConstPtr& msg){
+void LandingController::altitude_cb(const sensor_msgs::Range::ConstPtr& msg) {
     altitude = msg->range;
-    if(!rcvdFirstAltitudeMsg){
+    if(!rcvdFirstAltitudeMsg)
         rcvdFirstAltitudeMsg = true;
-    }
 }
 
-void LandingController::update(double x_error, double y_error){
-    if(!rcvdFirstAltitudeMsg){
+void LandingController::update(double x_error, double y_error) {
+    if(!rcvdFirstAltitudeMsg)
         return;
-    }
     // Find location of line/marker
     double error_norm = sqrt(pow(x_error,2)+pow(y_error,2));
     if(altitude < LAND_HEIGHT && error_norm < ERROR_THRESHOLD){
+
         land_client.call(landCmd);
         done = true;
         return;
