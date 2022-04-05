@@ -193,10 +193,20 @@
       <pose>18.223 -38.0905 0.71 0 -0 0.000194</pose>
     </model>
     <state world_name='default'>
-      <sim_time>930 179000000</sim_time>
-      <real_time>584 799367403</real_time>
-      <wall_time>1647989784 391599122</wall_time>
-      <iterations>532459</iterations>
+      <sim_time>994 731000000</sim_time>
+      <real_time>64 876966734</real_time>
+      <wall_time>1648172634 623927400</wall_time>
+      <iterations>64552</iterations>
+      <model name='Logo'>
+        <pose>-9.99683 -31.9498 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='main'>
+          <pose>-9.99683 -31.9498 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
       <model name='my_ground_plane'>
         <pose>0.006759 -0.009427 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -208,690 +218,690 @@
         </link>
       </model>
       <model name='pool_noodle_clone_1'>
-        <pose>18.2231 -38.0903 0.71 0 -0 0.002796</pose>
+        <pose>18.2231 -38.0903 0.71 0 -0 0.002783</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>18.2231 -38.0903 0.71 0 -0 0.002796</pose>
+          <pose>18.2231 -38.0903 0.71 0 -0 0.002783</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone'>
-        <pose>13.2506 -40.0644 0.709999 0 -0 0.002943</pose>
+        <pose>13.2506 -40.0644 0.70999 -1e-06 -0 0.002992</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>13.2506 -40.0644 0.709999 0 -0 0.002943</pose>
+          <pose>13.2506 -40.0644 0.70999 -1e-06 -0 0.002992</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_0'>
-        <pose>15.9572 -35.5775 0.709998 -1e-06 0 0.002888</pose>
+        <pose>15.9572 -35.5775 0.709991 0 -0 0.00289</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>15.9572 -35.5775 0.709998 -1e-06 0 0.002888</pose>
+          <pose>15.9572 -35.5775 0.709991 0 -0 0.00289</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <acceleration>0 0 -9.8 -0 -0 -0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_1'>
-        <pose>17.5787 -43.2711 0.709992 0 -0 0.002922</pose>
+        <pose>17.5787 -43.2711 0.709992 0 -0 0.002884</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>17.5787 -43.2711 0.709992 0 -0 0.002922</pose>
+          <pose>17.5787 -43.2711 0.709992 0 -0 0.002884</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_10'>
-        <pose>12.7431 -33.2034 0.709991 -1e-06 -0 0.002598</pose>
+        <pose>12.7431 -33.2034 0.709991 0 -0 0.00264</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>12.7431 -33.2034 0.709991 -1e-06 -0 0.002598</pose>
+          <pose>12.7431 -33.2034 0.709991 0 -0 0.00264</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_11'>
-        <pose>5.73423 -35.5294 0.71 0 -0 0.002806</pose>
+        <pose>5.73423 -35.5294 0.709998 0 -0 0.002766</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>5.73423 -35.5294 0.71 0 -0 0.002806</pose>
+          <pose>5.73423 -35.5294 0.709998 0 -0 0.002766</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <acceleration>0 0 -9.8 -0 -0 -0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_12'>
-        <pose>1.92352 -31.729 0.709991 0 -0 0.003029</pose>
+        <pose>1.92352 -31.729 0.709992 0 -0 0.00307</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>1.92352 -31.729 0.709991 0 -0 0.003029</pose>
+          <pose>1.92352 -31.729 0.709992 0 -0 0.00307</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_13'>
-        <pose>7.97611 -32.2369 0.709999 -1e-06 0 0.003091</pose>
+        <pose>7.97611 -32.2369 0.709998 -1e-06 -0 0.003076</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>7.97611 -32.2369 0.709999 -1e-06 0 0.003091</pose>
+          <pose>7.97611 -32.2369 0.709998 -1e-06 -0 0.003076</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_14'>
-        <pose>17.5321 -30.7393 0.709999 0 -0 0.002998</pose>
+        <pose>17.5321 -30.7393 0.709991 -1e-06 -0 0.003037</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>17.5321 -30.7393 0.709999 0 -0 0.002998</pose>
+          <pose>17.5321 -30.7393 0.709991 -1e-06 -0 0.003037</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_15'>
-        <pose>4.65568 -28.3534 0.709999 0 -0 0.002978</pose>
+        <pose>4.65568 -28.3534 0.709992 0 -0 0.002997</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>4.65568 -28.3534 0.709999 0 -0 0.002978</pose>
+          <pose>4.65568 -28.3534 0.709992 0 -0 0.002997</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_16'>
-        <pose>10.408 -29.6199 0.709991 0 -0 0.002698</pose>
+        <pose>10.408 -29.6199 0.709992 0 -0 0.002681</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>10.408 -29.6199 0.709991 0 -0 0.002698</pose>
+          <pose>10.408 -29.6199 0.709992 0 -0 0.002681</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_17'>
-        <pose>15.1415 -27.8659 0.71 0 1e-06 0.002817</pose>
+        <pose>15.1415 -27.8659 0.709991 0 -0 0.00288</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>15.1415 -27.8659 0.71 0 1e-06 0.002817</pose>
+          <pose>15.1415 -27.8659 0.709991 0 -0 0.00288</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_18'>
-        <pose>21.2648 -28.0445 0.71 0 -0 0.002888</pose>
+        <pose>21.2648 -28.0445 0.709998 0 -0 0.002858</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>21.2648 -28.0445 0.71 0 -0 0.002888</pose>
+          <pose>21.2648 -28.0445 0.709998 0 -0 0.002858</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_19'>
-        <pose>20.3996 -24.6396 0.709999 -1e-06 -0 0.002721</pose>
+        <pose>20.3996 -24.6396 0.71 0 -0 0.002742</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>20.3996 -24.6396 0.709999 -1e-06 -0 0.002721</pose>
+          <pose>20.3996 -24.6396 0.71 0 -0 0.002742</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_2'>
-        <pose>15.817 -41.8769 0.71 1e-06 -0 0.002904</pose>
+        <pose>15.817 -41.8769 0.709991 0 -0 0.00296</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>15.817 -41.8769 0.71 1e-06 -0 0.002904</pose>
+          <pose>15.817 -41.8769 0.709991 0 -0 0.00296</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_20'>
-        <pose>17.0304 -24.4819 0.71 0 -0 0.002549</pose>
+        <pose>17.0304 -24.4819 0.709998 0 -0 0.002515</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>17.0304 -24.4819 0.71 0 -0 0.002549</pose>
+          <pose>17.0304 -24.4819 0.709998 0 -0 0.002515</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_21'>
-        <pose>12.0926 -24.8374 0.709991 0 -0 0.002701</pose>
+        <pose>12.0926 -24.8374 0.709992 0 -0 0.002694</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>12.0926 -24.8374 0.709991 0 -0 0.002701</pose>
+          <pose>12.0926 -24.8374 0.709992 0 -0 0.002694</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_22'>
-        <pose>7.67411 -25.2903 0.709991 0 -0 0.002771</pose>
+        <pose>7.67411 -25.2903 0.709991 0 -0 0.002799</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>7.67411 -25.2903 0.709991 0 -0 0.002771</pose>
+          <pose>7.67411 -25.2903 0.709991 0 -0 0.002799</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_23'>
-        <pose>3.04888 -23.1771 0.71 1e-06 -0 0.002787</pose>
+        <pose>3.04888 -23.1771 0.709991 -1e-06 -0 0.002804</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>3.04888 -23.1771 0.71 1e-06 -0 0.002787</pose>
+          <pose>3.04888 -23.1771 0.709991 -1e-06 -0 0.002804</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_24'>
-        <pose>5.67906 -21.5546 0.71 0 -0 0.00291</pose>
+        <pose>5.67906 -21.5546 0.709998 0 -0 0.002883</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>5.67906 -21.5546 0.71 0 -0 0.00291</pose>
+          <pose>5.67906 -21.5546 0.709998 0 -0 0.002883</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_25'>
-        <pose>10.3068 -20.8109 0.709991 0 -0 0.002424</pose>
+        <pose>10.3068 -20.8109 0.71 0 -0 0.002471</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>10.3068 -20.8109 0.709991 0 -0 0.002424</pose>
+          <pose>10.3068 -20.8109 0.71 0 -0 0.002471</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_26'>
-        <pose>15.1341 -21.9943 0.709991 0 -0 0.00283</pose>
+        <pose>15.1341 -21.9943 0.709991 0 -0 0.00287</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>15.1341 -21.9943 0.709991 0 -0 0.00283</pose>
+          <pose>15.1341 -21.9943 0.709991 0 -0 0.00287</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_27'>
-        <pose>20.7332 -20.5165 0.709999 -1e-06 -0 0.002786</pose>
+        <pose>20.7332 -20.5165 0.709991 0 -0 0.002807</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>20.7332 -20.5165 0.709999 -1e-06 -0 0.002786</pose>
+          <pose>20.7332 -20.5165 0.709991 0 -0 0.002807</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_28'>
-        <pose>19.5916 -18.3125 0.709991 0 -0 0.002746</pose>
+        <pose>19.5916 -18.3125 0.709992 0 -0 0.002795</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>19.5916 -18.3125 0.709991 0 -0 0.002746</pose>
+          <pose>19.5916 -18.3125 0.709992 0 -0 0.002795</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_29'>
-        <pose>23.6235 -23.1284 0.709991 0 1e-06 0.002733</pose>
+        <pose>23.6235 -23.1284 0.709992 0 -0 0.002764</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>23.6235 -23.1284 0.709991 0 1e-06 0.002733</pose>
+          <pose>23.6235 -23.1284 0.709992 0 -0 0.002764</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_3'>
-        <pose>10.6491 -42.5698 0.709999 0 -0 0.002855</pose>
+        <pose>10.6491 -42.5698 0.709991 0 -0 0.002891</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>10.6491 -42.5698 0.709999 0 -0 0.002855</pose>
+          <pose>10.6491 -42.5698 0.709991 0 -0 0.002891</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_30'>
-        <pose>1.26413 -26.4157 0.709992 0 -0 0.002482</pose>
+        <pose>1.26413 -26.4157 0.709991 0 -0 0.002504</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>1.26413 -26.4157 0.709992 0 -0 0.002482</pose>
+          <pose>1.26413 -26.4157 0.709991 0 -0 0.002504</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_31'>
-        <pose>23.0973 -34.9999 0.709991 -1e-06 -0 0.002262</pose>
+        <pose>23.0973 -34.9999 0.70999 0 -0 0.002315</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>23.0973 -34.9999 0.709991 -1e-06 -0 0.002262</pose>
+          <pose>23.0973 -34.9999 0.70999 0 -0 0.002315</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_32'>
-        <pose>23.4259 -44.2644 0.709998 0 -0 0.002678</pose>
+        <pose>23.4259 -44.2644 0.709999 0 -1e-06 0.002654</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>23.4259 -44.2644 0.709998 0 -0 0.002678</pose>
+          <pose>23.4259 -44.2644 0.709999 0 -1e-06 0.002654</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_33'>
-        <pose>12.973 -44.4015 0.71 0 -1e-06 0.002359</pose>
+        <pose>12.973 -44.4015 0.709991 0 -0 0.002398</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>12.973 -44.4015 0.71 0 -1e-06 0.002359</pose>
+          <pose>12.973 -44.4015 0.709991 0 -0 0.002398</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_34'>
-        <pose>5.62947 -38.8022 0.709992 0 -0 0.002462</pose>
+        <pose>5.62947 -38.8022 0.71 0 -0 0.00245</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>5.62947 -38.8022 0.709992 0 -0 0.002462</pose>
+          <pose>5.62947 -38.8022 0.71 0 -0 0.00245</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_35'>
-        <pose>10.2195 -35.2014 0.709991 0 -0 0.002613</pose>
+        <pose>10.2195 -35.2014 0.709992 0 -0 0.002606</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>10.2195 -35.2014 0.709991 0 -0 0.002613</pose>
+          <pose>10.2195 -35.2014 0.709992 0 -0 0.002606</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_36'>
-        <pose>1.28497 -17.5627 0.709999 0 -0 0.002575</pose>
+        <pose>1.28497 -17.5627 0.709999 0 -0 0.002588</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>1.28497 -17.5627 0.709999 0 -0 0.002575</pose>
+          <pose>1.28497 -17.5627 0.709999 0 -0 0.002588</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_37'>
-        <pose>6.53034 -19.4291 0.70999 0 -0 0.002749</pose>
+        <pose>6.53034 -19.4291 0.709999 0 -0 0.00281</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>6.53034 -19.4291 0.70999 0 -0 0.002749</pose>
+          <pose>6.53034 -19.4291 0.709999 0 -0 0.00281</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_38'>
-        <pose>9.42187 -16.8461 0.71 0 -0 0.002655</pose>
+        <pose>9.42187 -16.8461 0.71 1e-06 -0 0.002662</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>9.42187 -16.8461 0.71 0 -0 0.002655</pose>
+          <pose>9.42187 -16.8461 0.71 1e-06 -0 0.002662</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_39'>
-        <pose>15.8827 -17.7041 0.71 1e-06 -0 0.002623</pose>
+        <pose>15.8827 -17.7041 0.71 0 -0 0.002677</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>15.8827 -17.7041 0.71 1e-06 -0 0.002623</pose>
+          <pose>15.8827 -17.7041 0.71 0 -0 0.002677</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_4'>
-        <pose>6.5913 -42.349 0.709991 0 -1e-06 0.003028</pose>
+        <pose>6.5913 -42.349 0.709991 0 -0 0.00308</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>6.5913 -42.349 0.709991 0 -1e-06 0.003028</pose>
+          <pose>6.5913 -42.349 0.709991 0 -0 0.00308</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_40'>
-        <pose>22.6305 -15.6232 0.70999 -2e-06 -0 0.002666</pose>
+        <pose>22.6305 -15.6232 0.70999 0 -0 0.00271</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>22.6305 -15.6232 0.70999 -2e-06 -0 0.002666</pose>
+          <pose>22.6305 -15.6232 0.70999 0 -0 0.00271</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_41'>
-        <pose>18.6024 -15.7764 0.71 0 -0 0.002621</pose>
+        <pose>18.6024 -15.7764 0.709991 0 -0 0.002645</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>18.6024 -15.7764 0.71 0 -0 0.002621</pose>
+          <pose>18.6024 -15.7764 0.709991 0 -0 0.002645</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_42'>
-        <pose>3.70775 -15.0478 0.709998 0 -0 0.002561</pose>
+        <pose>3.70775 -15.0478 0.709998 0 -0 0.002524</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>3.70775 -15.0478 0.709998 0 -0 0.002561</pose>
+          <pose>3.70775 -15.0478 0.709998 0 -0 0.002524</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_43'>
-        <pose>12.9829 -16.7053 0.70999 0 -0 0.002626</pose>
+        <pose>12.9829 -16.7053 0.709999 0 -0 0.002669</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>12.9829 -16.7053 0.70999 0 -0 0.002626</pose>
+          <pose>12.9829 -16.7053 0.709999 0 -0 0.002669</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_44'>
-        <pose>5.89543 -13.1593 0.709999 0 -0 0.00263</pose>
+        <pose>5.89543 -13.1593 0.709998 0 -0 0.002608</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>5.89543 -13.1593 0.709999 0 -0 0.00263</pose>
+          <pose>5.89543 -13.1593 0.709998 0 -0 0.002608</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_45'>
-        <pose>1.42939 -9.7854 0.709991 0 -0 0.002627</pose>
+        <pose>1.42939 -9.7854 0.70999 -1e-06 -0 0.002659</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>1.42939 -9.7854 0.709991 0 -0 0.002627</pose>
+          <pose>1.42939 -9.7854 0.70999 -1e-06 -0 0.002659</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_46'>
-        <pose>9.65922 -11.9616 0.709998 0 -0 0.002399</pose>
+        <pose>9.65922 -11.9616 0.709999 0 -0 0.002366</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>9.65922 -11.9616 0.709998 0 -0 0.002399</pose>
+          <pose>9.65922 -11.9616 0.709999 0 -0 0.002366</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_47'>
-        <pose>15.4117 -12.4944 0.709999 0 -0 0.002605</pose>
+        <pose>15.4117 -12.4944 0.709999 0 -0 0.002612</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>15.4117 -12.4944 0.709999 0 -0 0.002605</pose>
+          <pose>15.4117 -12.4944 0.709999 0 -0 0.002612</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_48'>
-        <pose>11.2533 -14.3372 0.71 1e-06 -1e-06 0.00255</pose>
+        <pose>11.2533 -14.3372 0.709991 0 -0 0.002597</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>11.2533 -14.3372 0.71 1e-06 -1e-06 0.00255</pose>
+          <pose>11.2533 -14.3372 0.709991 0 -0 0.002597</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_49'>
-        <pose>19.792 -12.7456 0.709999 0 -0 0.0026</pose>
+        <pose>19.792 -12.7456 0.709991 0 -0 0.00265</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>19.792 -12.7456 0.709999 0 -0 0.0026</pose>
+          <pose>19.792 -12.7456 0.709991 0 -0 0.00265</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_5'>
-        <pose>2.31853 -38.3663 0.709999 0 -0 0.002857</pose>
+        <pose>2.31853 -38.3663 0.709999 0 -0 0.002896</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>2.31853 -38.3663 0.709999 0 -0 0.002857</pose>
+          <pose>2.31853 -38.3663 0.709999 0 -0 0.002896</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_50'>
-        <pose>22.397 -10.2063 0.709999 1e-06 -1e-06 0.002531</pose>
+        <pose>22.397 -10.2063 0.71 0 -1e-06 0.002576</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>22.397 -10.2063 0.709999 1e-06 -1e-06 0.002531</pose>
+          <pose>22.397 -10.2063 0.71 0 -1e-06 0.002576</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_51'>
-        <pose>16.9785 -9.77531 0.71 0 -0 0.002507</pose>
+        <pose>16.9785 -9.77531 0.709998 0 -0 0.002497</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>16.9785 -9.77531 0.71 0 -0 0.002507</pose>
+          <pose>16.9785 -9.77531 0.709998 0 -0 0.002497</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_52'>
-        <pose>13 -7.99999 0.71 0 -0 0.002555</pose>
+        <pose>13 -7.99999 0.709998 0 -0 0.002525</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>13 -7.99999 0.71 0 -0 0.002555</pose>
+          <pose>13 -7.99999 0.709998 0 -0 0.002525</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_53'>
-        <pose>7.45915 -10.1678 0.709999 0 -0 0.002552</pose>
+        <pose>7.45915 -10.1678 0.71 0 -0 0.002594</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>7.45915 -10.1678 0.709999 0 -0 0.002552</pose>
+          <pose>7.45915 -10.1678 0.71 0 -0 0.002594</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_54'>
-        <pose>4.85656 -7.36096 0.709992 0 -0 0.002337</pose>
+        <pose>4.85656 -7.36096 0.709992 -1e-06 -0 0.002286</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>4.85656 -7.36096 0.709992 0 -0 0.002337</pose>
+          <pose>4.85656 -7.36096 0.709992 -1e-06 -0 0.002286</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_55'>
-        <pose>1.55384 -4.98338 0.71 -0 1e-06 0.002446</pose>
+        <pose>1.55384 -4.98338 0.709999 0 -0 0.002493</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>1.55384 -4.98338 0.71 -0 1e-06 0.002446</pose>
+          <pose>1.55384 -4.98338 0.709999 0 -0 0.002493</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_56'>
-        <pose>9 -4.99999 0.709991 0 -0 0.002536</pose>
+        <pose>9 -4.99999 0.709992 0 -0 0.002513</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>9 -4.99999 0.709991 0 -0 0.002536</pose>
+          <pose>9 -4.99999 0.709992 0 -0 0.002513</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_57'>
-        <pose>17.8919 -6.96669 0.709992 0 -0 0.002492</pose>
+        <pose>17.8919 -6.96669 0.71 0 -0 0.002488</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>17.8919 -6.96669 0.709992 0 -0 0.002492</pose>
+          <pose>17.8919 -6.96669 0.71 0 -0 0.002488</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_58'>
-        <pose>9.51405 -6.87086 0.709999 0 -1e-06 0.002497</pose>
+        <pose>9.51405 -6.87086 0.709991 0 -0 0.002549</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>9.51405 -6.87086 0.709999 0 -1e-06 0.002497</pose>
+          <pose>9.51405 -6.87086 0.709991 0 -0 0.002549</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 -0 -0 -0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_59'>
-        <pose>22.3917 -4.77243 0.709991 0 -0 0.002443</pose>
+        <pose>22.3917 -4.77243 0.709991 0 -0 0.002499</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>22.3917 -4.77243 0.709991 0 -0 0.002443</pose>
+          <pose>22.3917 -4.77243 0.709991 0 -0 0.002499</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_6'>
-        <pose>8.62463 -38.3561 0.709998 0 -0 0.002611</pose>
+        <pose>8.62463 -38.3561 0.71 0 -0 0.00259</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>8.62463 -38.3561 0.709998 0 -0 0.002611</pose>
+          <pose>8.62463 -38.3561 0.71 0 -0 0.00259</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_60'>
-        <pose>16.1166 -4.45563 0.70999 0 -0 0.002479</pose>
+        <pose>16.1166 -4.45563 0.709991 0 -0 0.002543</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>16.1166 -4.45563 0.70999 0 -0 0.002479</pose>
+          <pose>16.1166 -4.45563 0.709991 0 -0 0.002543</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_61'>
-        <pose>21.9633 -2.63707 0.709991 -1e-06 0 0.002443</pose>
+        <pose>21.9633 -2.63707 0.709998 0 -0 0.002463</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>21.9633 -2.63707 0.709991 -1e-06 0 0.002443</pose>
+          <pose>21.9633 -2.63707 0.709998 0 -0 0.002463</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <acceleration>0 0 -9.8 -0 -0 -0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_62'>
-        <pose>17.9454 -1.79682 0.709991 0 -0 0.002453</pose>
+        <pose>17.9454 -1.79682 0.71 0 -0 0.002505</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>17.9454 -1.79682 0.709991 0 -0 0.002453</pose>
+          <pose>17.9454 -1.79682 0.71 0 -0 0.002505</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_63'>
-        <pose>12 -2 0.709991 -1e-06 0 0.002429</pose>
+        <pose>12 -2 0.71 0 -0 0.002476</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>12 -2 0.709991 -1e-06 0 0.002429</pose>
+          <pose>12 -2 0.71 0 -0 0.002476</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_64'>
-        <pose>6.54735 -3.70365 0.709991 0 -0 0.002402</pose>
+        <pose>6.54735 -3.70365 0.709991 -1e-06 0 0.00244</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>6.54735 -3.70365 0.709991 0 -0 0.002402</pose>
+          <pose>6.54735 -3.70365 0.709991 -1e-06 0 0.00244</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_65'>
-        <pose>1.73153 -0.902277 0.71 0 -0 0.002419</pose>
+        <pose>1.73153 -0.902275 0.709998 0 -0 0.002391</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>1.73153 -0.902277 0.71 0 -0 0.002419</pose>
+          <pose>1.73153 -0.902275 0.709998 0 -0 0.002391</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_66'>
-        <pose>12.8532 -5.4195 0.709999 0 -0 0.002402</pose>
+        <pose>12.8532 -5.4195 0.709999 0 -0 0.002434</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>12.8532 -5.4195 0.709999 0 -0 0.002402</pose>
+          <pose>12.8532 -5.4195 0.709999 0 -0 0.002434</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_7'>
-        <pose>2.69444 -43.6408 0.709992 -1e-06 -1e-06 0.002935</pose>
+        <pose>2.69444 -43.6408 0.709992 0 -0 0.002922</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>2.69444 -43.6408 0.709992 -1e-06 -1e-06 0.002935</pose>
+          <pose>2.69444 -43.6408 0.709992 0 -0 0.002922</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_8'>
-        <pose>22.3996 -41.3391 0.71 0 -0 0.002836</pose>
+        <pose>22.3996 -41.3391 0.709999 0 -0 0.00287</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>22.3996 -41.3391 0.71 0 -0 0.002836</pose>
+          <pose>22.3996 -41.3391 0.709999 0 -0 0.00287</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='pool_noodle_clone_1_clone_9'>
-        <pose>20.9101 -33.3942 0.709992 0 -0 0.002649</pose>
+        <pose>20.9101 -33.3942 0.71 1e-06 0 0.002639</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>20.9101 -33.3942 0.709992 0 -0 0.002649</pose>
+          <pose>20.9101 -33.3942 0.71 1e-06 0 0.002639</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
@@ -903,7 +913,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>0 0 92.3145 3.14159 1.57079 3.14159</pose>
+        <pose>-5.8802 -50.0329 37.0806 -0 1.09879 1.56559</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
@@ -7979,6 +7989,54 @@
       <static>0</static>
       <allow_auto_disable>1</allow_auto_disable>
       <pose>12.8532 -5.4195 0.71 -1e-06 -0 0.002369</pose>
+    </model>
+    <model name='Logo'>
+      <link name='main'>
+        <pose>0 0 0 0 -0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+        <inertial>
+          <mass>1</mass>
+          <pose>0 0 0 0 -0 0</pose>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <visual name='main_Visual'>
+          <geometry>
+            <box>
+              <size>0.6096 0.6096 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://Apriltag36_11_00000/materials/scripts</uri>
+              <uri>model://Apriltag36_11_00000/materials/textures</uri>
+              <name>Apriltag36_11_00000</name>
+            </script>
+            <shader type='pixel'>
+              <normal_map>__default__</normal_map>
+            </shader>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0 0 0 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+          <pose>0 0 0 0 -0 0</pose>
+          <transparency>0</transparency>
+          <cast_shadows>1</cast_shadows>
+        </visual>
+      </link>
+      <static>1</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose>-9.99683 -31.9498 0 0 -0 0</pose>
     </model>
   </world>
 </sdf>
