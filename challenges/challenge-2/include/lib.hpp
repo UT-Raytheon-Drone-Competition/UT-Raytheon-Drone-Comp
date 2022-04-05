@@ -12,8 +12,8 @@
 #include <tf/LinearMath/Matrix3x3.h>
 #include <tf/transform_datatypes.h>
 #include <sensor_msgs/Image.h>
-#include <apriltag_ros/AprilTagDetection.h>
-#include <landing-controller/LandingController.h>
+#include <apriltag_ros/AprilTagDetectionArray.h>
+#include "LandingController.h"
 
 nav_msgs::Odometry current_pose_g;
 
@@ -98,13 +98,13 @@ public:
     void startLanding(ros::Rate& rate){
         ROS_INFO("Found tag, starting landing");
         LandingController lander(*n, 1);// TODO: tune xy_gains
-        while(!lander.done()){
+        while(!lander.landed()){
             lander.update(x_error, y_error);
             ros::spinOnce();
             rate.sleep();
         }
     }
-}
+};
 
 
 #endif //GNC_FUNCTIONS

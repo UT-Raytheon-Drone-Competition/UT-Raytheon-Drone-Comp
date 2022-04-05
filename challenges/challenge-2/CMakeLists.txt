@@ -121,6 +121,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include
+  ../landing-controller/include
   ${catkin_INCLUDE_DIRS}
 )
 

@@ -26,6 +26,6 @@ public:
     void altitude_cb(const sensor_msgs::Range::ConstPtr& msg);
     void update(double x_error, double y_error);
     bool landed();
-}
+};
 
 #endif

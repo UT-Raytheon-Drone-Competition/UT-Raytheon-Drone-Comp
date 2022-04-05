@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
             }
         }
         if(tracker.checkTimeToLand()){
-            tracker.startLanding();
+            tracker.startLanding(rate);
             missionDone = true;
         }
         else{

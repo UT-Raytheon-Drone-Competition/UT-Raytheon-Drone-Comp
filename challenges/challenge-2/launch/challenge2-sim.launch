@@ -1,6 +1,6 @@
 <launch>
         <!-- Launch MAVROS -->
         <include file="$(find local_planner)/launch/local_planner_depth-camera.launch"/>
-        <include file="$(find apriltags2_ros)/launch/continuous_detection.launch"/>
+        <include file="$(find apriltag_ros)/launch/continuous_detection.launch"/>
         <node pkg="challenge-2" name="challenge-2_node" type="challenge-2_node" />
 </launch>
