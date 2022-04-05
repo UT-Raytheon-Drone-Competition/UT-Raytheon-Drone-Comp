@@ -13,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   nav_msgs
   roscpp
+  apriltag_ros
+  landing-controller
 )
 
 ## System dependencies are found with CMake's conventions
