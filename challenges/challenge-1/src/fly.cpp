@@ -13,12 +13,12 @@ int main(int argc, char **argv) {
 
     // Establish subscribers, publishers, and service client
     ros::Subscriber state_sub = nh.subscribe<mavros_msgs::State>
-            ("mavros/state", 10, state_callback);
+            ("mavros/state", 1, state_callback);
     ros::Subscriber pose_sub = nh.subscribe<nav_msgs::Odometry>
-            ("mavros/odometry/in", 10, pos_callback);
+            ("mavros/odometry/in", 1, pos_callback);
 
     ros::Publisher local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>
-            ("mavros/setpoint_position/local", 10);
+            ("mavros/setpoint_position/local", 1);
 
     ros::ServiceClient arming_client = nh.serviceClient<mavros_msgs::CommandBool>
             ("mavros/cmd/arming");

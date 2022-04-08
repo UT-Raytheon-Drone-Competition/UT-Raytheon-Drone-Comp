@@ -6,10 +6,12 @@ LandingController::LandingController(ros::NodeHandle& nh, double xy_gain){
     done = false;
     altitude_sub = nh.subscribe<sensor_msgs::Range>("/sonar", 1,
                     &LandingController::altitude_cb, this);
-    velocity_pub = nh.advertise<geometry_msgs::Twist>("/mavros/setpoint_velocity/cmd_vel",1);
+    target_pub = nh.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local",1);
     land_client = nh.serviceClient<mavros_msgs::CommandTOL>("mavros/cmd/land");
     land_client.waitForExistence(ros::Duration(0.5));
     this->xy_gain = xy_gain;
+    ros::Subscriber pose_sub = nh.subscribe<nav_msgs::Odometry>
+            ("mavros/odometry/in", 1, LandingController::pos_callback, this);
 }
 
 void LandingController::altitude_cb(const sensor_msgs::Range::ConstPtr& msg) {
@@ -30,14 +32,18 @@ void LandingController::update(double x_error, double y_error) {
         return;
     }
     // Send velocity command to mavros, where z velocity is DESCENT_RATE, and x/y velocity is a function of the offset of the line/marker from the center of the image
-    geometry_msgs::Twist vel_cmd;
-    
-    vel_cmd.linear.x = xy_gain*x_error;
-    vel_cmd.linear.y = xy_gain*y_error;
-    vel_cmd.linear.z = DESCENT_RATE;
-    velocity_pub.publish(vel_cmd);
+    geometry_msgs::PoseStamped cmd;
+    cmd.header.stamp = ros::Time::now();
+    cmd.pose.position.x = current_pose.position.x + xy_gain*x_error;
+    cmd.pose.position.y = current_pose.position.y + xy_gain*y_error;
+    cmd.pose.position.z = current_pose.position.z - DESCENT_RATE;
+    target_pub.publish(cmd);
 }
 
 bool LandingController::landed(){
     return done;
+}
+
+void LandingController::pos_callback(const nav_msgs::Odometry:ConstPtr& msg){
+    current_pose = msg->pose.pose;
 }

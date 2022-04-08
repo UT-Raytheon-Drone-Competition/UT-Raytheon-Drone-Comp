@@ -4,11 +4,11 @@
 #include "mavros_msgs/CommandTOL.h"
 #include "sensor_msgs/Range.h"
 #include "sensor_msgs/Image.h"
-#include "geometry_msgs/Twist.h"
+#include "geometry_msgs/PoseStamped.h"
 
 #define LAND_HEIGHT 3 // Height at which to send the land command (in meters)
 #define ERROR_THRESHOLD 0.1 // where error is how far from the center of the image the line/marker is
-#define DESCENT_RATE -0.1 // m/s
+#define DESCENT_RATE 0.02 // m/s
 
 class LandingController{
 private:
@@ -16,16 +16,19 @@ private:
     bool rcvdFirstAltitudeMsg;
     mavros_msgs::CommandTOL landCmd;
     ros::Subscriber altitude_sub;
-    ros::Publisher velocity_pub;
+    ros::Subscriber pose_sub;
+    ros::Publisher target_pub;
     ros::ServiceClient land_client;
     bool done;
     double xy_gain;
+    geometry_msgs::Pose current_pose;
 
 public:
     LandingController(ros::NodeHandle& nh, double xy_gain);
     void altitude_cb(const sensor_msgs::Range::ConstPtr& msg);
     void update(double x_error, double y_error);
     bool landed();
+    void pos_callback(const nav_msgs::Odometry::ConstPtr& msg);
 };
 
 #endif
