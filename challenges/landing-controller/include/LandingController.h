@@ -2,13 +2,14 @@
 #define LAND_CONTROL
 #include "ros/ros.h"
 #include "mavros_msgs/CommandTOL.h"
+#include "nav_msgs/Odometry.h"
 #include "sensor_msgs/Range.h"
 #include "sensor_msgs/Image.h"
 #include "geometry_msgs/PoseStamped.h"
 
 #define LAND_HEIGHT 3 // Height at which to send the land command (in meters)
-#define ERROR_THRESHOLD 0.1 // where error is how far from the center of the image the line/marker is
-#define DESCENT_RATE 0.02 // m/s
+#define ERROR_THRESHOLD 0.05 // where error is how far from the center of the image the line/marker is
+#define DESCENT_RATE 0.4
 
 class LandingController{
 private:

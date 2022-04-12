@@ -43,43 +43,29 @@ int main(int argc, char **argv) {
     land_cmd.request.longitude = 0;
     land_cmd.request.altitude = 0;
 
+    ROS_INFO("Creating Waypoints");
+
     // Waypoints (make U-shape survey)
     tf::Quaternion q;
     q.setRPY(0, 0, 1.570796);
-    // TODO: Create search path
-    geometry_msgs::PoseStamped pose1;
-    pose1.pose.position.x = 0;
-    pose1.pose.position.y = 0;
-    pose1.pose.position.z = 6;
-    quaternionTFToMsg(q, pose1.pose.orientation);
 
-    geometry_msgs::PoseStamped pose2;
-    pose2.pose.position.x = 0;
-    pose2.pose.position.y = 43;
-    pose2.pose.position.z = 6;
-    quaternionTFToMsg(q, pose2.pose.orientation);
+    //double y_int = 2.286;
+    //std::vector<double> x = {0, 24.4, 0, 24.4, 0, 24.4, 0, 24.4, 0, 24.4, 0, 24.4, 0};
+    //std::vector<double> y = {0, y_int, 2*y_int, 3*y_int, 4*y_int,  5*y_int,  6*y_int,  7*y_int,  8*y_int,  9*y_int,  10*y_int,  11*y_int,  12*y_int};
 
-    geometry_msgs::PoseStamped pose3;
-    pose3.pose.position.x = 16;
-    pose3.pose.position.y = 43;
-    pose3.pose.position.z = 6;
-    quaternionTFToMsg(q, pose3.pose.orientation);
+    std::vector<double> x;
+    std::vector<double> y;
 
-    geometry_msgs::PoseStamped pose4;
-    pose4.pose.position.x = 16;
-    pose4.pose.position.y = 0;
-    pose4.pose.position.z = 6;
-    quaternionTFToMsg(q, pose4.pose.orientation);
+    for (int i = 0; i < 25; i++) {
+        x.push_back(i % 4 == 0 ? 0 : (i % 4 == 2) ? 24.3 : 12.15);
+        y.push_back(i * 1.143);
+    }
 
-    std::vector<geometry_msgs::PoseStamped*> goals;
-    goals.push_back(&pose1);
-    goals.push_back(&pose2);
-    goals.push_back(&pose3);
-    goals.push_back(&pose4);
+    std::vector<geometry_msgs::PoseStamped> goals = generate_waypoints(x, y, 6, q);
 
     // Send a few setpoints before starting
     for(int i = 100; ros::ok() && i > 0; --i){
-        local_pos_pub.publish(pose1);
+        local_pos_pub.publish((goals[0]));
         ros::spinOnce();
         rate.sleep();
     }
@@ -118,8 +104,8 @@ int main(int argc, char **argv) {
             missionDone = true;
         }
         else{
-            local_pos_pub.publish(*(goals[cur_goal_idx]));
-            if(check_waypoint_reached(*(goals[cur_goal_idx]))) {
+            local_pos_pub.publish((goals[cur_goal_idx]));
+            if(check_waypoint_reached((goals[cur_goal_idx]))) {
                 ROS_INFO_STREAM("Waypoint" << cur_goal_idx << " reached");
                 cur_goal_idx++;	
                 if(cur_goal_idx >= goals.size()) {

@@ -48,19 +48,34 @@ void pos_callback(const nav_msgs::Odometry::ConstPtr& msg) {
     current_pose_g = *msg;
 }
 
+std::vector<geometry_msgs::PoseStamped> generate_waypoints(std::vector<double>& x, std::vector<double>& y, double z, tf::Quaternion q){
+    std::vector<geometry_msgs::PoseStamped> goals;
+    for(int i = 0; i < x.size(); i++){
+        ROS_INFO_STREAM("Waypoint " << i);
+        double x_coor = x[i];
+        double y_coor = y[i];
+        geometry_msgs::PoseStamped goal;
+        goal.pose.position.x = x_coor;
+        goal.pose.position.y = y_coor;
+        goal.pose.position.z = z;
+        quaternionTFToMsg(q, goal.pose.orientation);
+        goals.push_back(goal);
+    }
+    return goals;
+}
+
 class TagTracker{
 
 private:
     ros::NodeHandle* n;
     int consecutive_frames;
-    int missed_frames;
     bool timeToLand;
     ros::Subscriber downward_april_sub;
     double x_error;
     double y_error;
 public:
     TagTracker(ros::NodeHandle* nh):
-        n(nh), consecutive_frames(0), missed_frames(0), timeToLand(false)
+        n(nh), consecutive_frames(0), timeToLand(false)
     {
         downward_april_sub = nh->subscribe<apriltag_ros::AprilTagDetectionArray>
             ("/tag_detections", 1, &TagTracker::downward_april_callback, this);
@@ -74,21 +89,12 @@ public:
                     return;
                 }
             }
-            // set error to 0 if undetected to prevent drift
-            x_error = 0;
-            y_error = 0;
         }
         if(msg->detections.size() > 0 && true){
             // TODO: Check the id of the Apriltag above
             consecutive_frames++;
-            if(consecutive_frames > 100){
+            if(consecutive_frames > 1){
                 timeToLand = true;
-            }
-        }else{
-            missed_frames++;
-            if(missed_frames > 5){
-                missed_frames = 0;
-                consecutive_frames = 0;
             }
         }
     }
@@ -97,7 +103,7 @@ public:
     }
     void startLanding(ros::Rate& rate){
         ROS_INFO("Found tag, starting landing");
-        LandingController lander(*n, 1);// TODO: tune xy_gains
+        LandingController lander(*n, 0.5);// TODO: tune xy_gains
         while(!lander.landed()){
             lander.update(x_error, y_error);
             ros::spinOnce();
