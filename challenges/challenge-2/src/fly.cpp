@@ -29,7 +29,6 @@ int main(int argc, char **argv) {
 
     // The setpoint publishing rate MUST be faster than 2Hz
     ros::Rate rate(100.0);
-
     // Wait for FCU connection
     while(ros::ok() && !current_state.connected){
         ros::spinOnce();
@@ -45,20 +44,40 @@ int main(int argc, char **argv) {
 
     ROS_INFO("Creating Waypoints");
 
-    // Waypoints (make U-shape survey)
     tf::Quaternion q;
     q.setRPY(0, 0, 1.570796);
-
-    //double y_int = 2.286;
-    //std::vector<double> x = {0, 24.4, 0, 24.4, 0, 24.4, 0, 24.4, 0, 24.4, 0, 24.4, 0};
-    //std::vector<double> y = {0, y_int, 2*y_int, 3*y_int, 4*y_int,  5*y_int,  6*y_int,  7*y_int,  8*y_int,  9*y_int,  10*y_int,  11*y_int,  12*y_int};
 
     std::vector<double> x;
     std::vector<double> y;
 
-    for (int i = 0; i < 25; i++) {
-        x.push_back(i % 4 == 0 ? 0 : (i % 4 == 2) ? 24.3 : 12.15);
-        y.push_back(i * 1.143);
+    for (int i = 0; i < 49; i++) {
+        switch (i % 8) {
+            case 0:
+                x.push_back(0);
+                break;
+            case 1:
+                x.push_back(6.1);
+                break;
+            case 2:
+                x.push_back(12.2);
+                break;
+            case 3:
+                x.push_back(18.3);
+                break;
+            case 4:
+                x.push_back(24.4);
+                break;
+            case 5:
+                x.push_back(18.3);
+                break;
+            case 6:
+                x.push_back(12.2);
+                break;
+            case 7:
+                x.push_back(6.1);
+                break;
+        }
+        y.push_back(i * 0.5715);
     }
 
     std::vector<geometry_msgs::PoseStamped> goals = generate_waypoints(x, y, 6, q);

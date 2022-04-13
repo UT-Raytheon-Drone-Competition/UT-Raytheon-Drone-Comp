@@ -7,9 +7,9 @@
 #include "sensor_msgs/Image.h"
 #include "geometry_msgs/PoseStamped.h"
 
-#define LAND_HEIGHT 3 // Height at which to send the land command (in meters)
+#define LAND_HEIGHT 1 // Height at which to send the land command (in meters)
 #define ERROR_THRESHOLD 0.05 // where error is how far from the center of the image the line/marker is
-#define DESCENT_RATE 0.4
+#define DESCENT_RATE 0.5
 
 class LandingController{
 private:
@@ -22,10 +22,13 @@ private:
     ros::ServiceClient land_client;
     bool done;
     double xy_gain;
+    double K_d;
     geometry_msgs::Pose current_pose;
+    double prev_x;
+    double prev_y;
 
 public:
-    LandingController(ros::NodeHandle& nh, double xy_gain);
+    LandingController(ros::NodeHandle& nh, double xy_gain, double K_d);
     void altitude_cb(const sensor_msgs::Range::ConstPtr& msg);
     void update(double x_error, double y_error);
     bool landed();

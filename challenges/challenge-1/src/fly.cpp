@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
 
     bool missionDone = false;
     bool landing = false;
-    LandingController lander(nh, 1); // TODO: tune xy gain
+    LandingController lander(nh, 1, 0.5); // TODO: tune xy gain
 
     while(ros::ok() && !missionDone) {
         if(!landing){
