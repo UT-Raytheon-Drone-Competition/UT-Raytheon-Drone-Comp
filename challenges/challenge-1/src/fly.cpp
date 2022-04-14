@@ -1,9 +1,17 @@
 #include "lib.hpp"
 
 mavros_msgs::State current_state;
+bool landing = false;
+double y_error = 0;
 
 void state_callback(const mavros_msgs::State::ConstPtr& msg){
     current_state = *msg;
+}
+
+void line_coord_callback(const std_msgs::Float64::ConstPtr& msg){
+    if(landing){
+        y_error = msg->data;
+    }
 }
 
 int main(int argc, char **argv) {
@@ -16,6 +24,8 @@ int main(int argc, char **argv) {
             ("mavros/state", 1, state_callback);
     ros::Subscriber pose_sub = nh.subscribe<nav_msgs::Odometry>
             ("mavros/odometry/in", 1, pos_callback);
+    ros::Subscriber line_coord_sub = nh.subscribe<std_msgs::Float64>
+            ("/line_coordinates", 1, line_coord_callback);
 
     ros::Publisher local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>
             ("mavros/setpoint_position/local", 1);
@@ -97,8 +107,7 @@ int main(int argc, char **argv) {
     int ypos = 0;
 
     bool missionDone = false;
-    bool landing = false;
-    LandingController lander(nh, 1, 0.5); // TODO: tune xy gain
+    LandingController lander(nh, 1, 0); // TODO: tune xy gain
 
     while(ros::ok() && !missionDone) {
         if(!landing){
@@ -133,7 +142,7 @@ int main(int argc, char **argv) {
             }
         }
         else{
-            lander.update(0,0);
+            lander.update(0,y_error);
             if(lander.landed()){
                 missionDone = true;
             }

@@ -1,5 +1,7 @@
 <launch>
         <!-- Launch MAVROS -->
-        <include file="$(find local_planner)/launch/local_planner_depth-camera.launch"/>
+        <node pkg="challenge-1" type="sim_env_setup.sh" name="run_script" output="screen"/>
+        <node pkg="line_tracker" type="LineTracker.py" name="line_tracker"/>
+        <node pkg="rqt_image_view" type="rqt_image_view" name="downward_cam"/>
         <node pkg="challenge-1" name="challenge-1_node" type="challenge-1_node" />
 </launch>
