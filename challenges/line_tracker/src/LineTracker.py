@@ -5,6 +5,8 @@ from std_msgs.msg import Float64
 from cv_bridge import CvBridge
 import numpy as np
 import cv2
+from scipy.spatial import distance
+
 
 rospy.init_node('line_tracker')
 line_coord_pub = rospy.Publisher("line_coordinates", Float64, queue_size=1)
@@ -23,6 +25,27 @@ def getContourWithMaxAR(contours):
 
     return max_contour
 
+
+def getContourClosestToMiddle(contours, image_center):
+    closest_contour = contours[0]
+    closest_contour_distance = 10000
+
+    for c in contours:
+        x, y, w, h = cv2.boundingRect(c)
+        aspect_ratio = float(w) / h
+
+        M = cv2.moments(c)
+        cx = int(M['m10'] / M['m00']) if M['m00'] != 0 else 0
+        cy = int(M['m01'] / M['m00']) if M['m00'] != 0 else 0
+        contour_center = (cx, cy)
+        distance_to_center = (distance.euclidean(image_center, contour_center))
+
+        if distance_to_center < closest_contour_distance and aspect_ratio > .95:
+            closest_contour = c
+            closest_contour_distance = distance_to_center
+
+    return closest_contour
+
 def image_cb(msg):
     frame = bridge.imgmsg_to_cv2(msg)
     # Convert to grayscale
@@ -33,10 +56,12 @@ def image_cb(msg):
     ret, thresh = cv2.threshold(blur, 200, 255, cv2.THRESH_BINARY)
     # Find the contours of the frame
     contours, hierarchy = cv2.findContours(thresh.copy(), 1, cv2.CHAIN_APPROX_NONE)
-    # Find the biggest contour (if detected)
+
+    (h, w) = blur.shape[:2]
+    image_center = (w // 2, h // 2)
 
     if len(contours) > 0:
-        c = getContourWithMaxAR(contours)
+        c = get_contour_closest_to_middle(contours, image_center)
         M = cv2.moments(c)
         cx = int(M['m10'] / M['m00']) if M['m00'] != 0 else 0
         cy = int(M['m01'] / M['m00']) if M['m00'] != 0 else 0
