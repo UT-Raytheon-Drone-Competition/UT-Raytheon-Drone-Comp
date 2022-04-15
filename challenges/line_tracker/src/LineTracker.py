@@ -26,7 +26,7 @@ def getContourWithMaxAR(contours):
     return max_contour
 
 
-def getContourClosestToMiddle(contours, image_center):
+def get_contour_closest_to_middle(contours, image_center):
     closest_contour = contours[0]
     closest_contour_distance = 10000
 
@@ -76,5 +76,5 @@ def image_cb(msg):
 
     # cv2.imshow('frame', blur)
 
-rospy.Subscriber("/INSERT/IMAGE/TOPIC", Image, image_cb)
+rospy.Subscriber("/rrbot/camera1/image_raw", Image, image_cb)
 rospy.spin()

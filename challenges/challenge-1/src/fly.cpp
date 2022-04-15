@@ -1,4 +1,5 @@
 #include "lib.hpp"
+#include <std_msgs/Float64.h>
 
 mavros_msgs::State current_state;
 bool landing = false;
