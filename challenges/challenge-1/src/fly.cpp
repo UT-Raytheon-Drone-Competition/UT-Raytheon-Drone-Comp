@@ -136,7 +136,7 @@ int main(int argc, char **argv) {
             if(check_waypoint_reached(pose)) {
                 ROS_INFO_STREAM("Waypoint" << ypos << " reached");
                 ypos++;	
-                if(ypos > 27) {
+                if(ypos > 1) {
                     ROS_INFO("Landing");
                     landing = true;
                 }

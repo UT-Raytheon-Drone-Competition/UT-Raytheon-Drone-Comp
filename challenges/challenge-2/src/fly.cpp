@@ -50,12 +50,12 @@ int main(int argc, char **argv) {
     std::vector<double> x;
     std::vector<double> y;
 
-    double y_len = 27.432;  // 30 yards
-    double x_len = 2.286;   // 2.5 yards
-    int numPoints = 15;
+    double y_len = 5;
+    double x_len = 2;
+    int numPoints = 10;
 
     // Interpolate waypoints
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 2; i++) {
         for (int j = 0; j < numPoints; j++) {
             x.push_back(i * x_len + j * x_len/numPoints);
             (i % 2 == 0) ? y.push_back(j * y_len/numPoints) : y.push_back(y_len - j * y_len/numPoints);
