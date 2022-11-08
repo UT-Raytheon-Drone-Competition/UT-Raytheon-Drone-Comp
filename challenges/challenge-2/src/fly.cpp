@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     ros::Subscriber state_sub = nh.subscribe<mavros_msgs::State>
             ("mavros/state", 10, state_callback);
     ros::Subscriber pose_sub = nh.subscribe<nav_msgs::Odometry>
-            ("mavros/odometry/in", 10, pos_callback);
+            ("mavros/local_position/odom", 10, pos_callback);
 
     ros::Publisher local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>
             ("mavros/setpoint_position/local", 10);
@@ -50,12 +50,12 @@ int main(int argc, char **argv) {
     std::vector<double> x;
     std::vector<double> y;
 
-    double y_len = 5;
+    double y_len = 36.576;
     double x_len = 2;
-    int numPoints = 10;
+    int numPoints = 20;
 
     // Interpolate waypoints
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 12; i++) {
         for (int j = 0; j < numPoints; j++) {
             x.push_back(i * x_len + j * x_len/numPoints);
             (i % 2 == 0) ? y.push_back(j * y_len/numPoints) : y.push_back(y_len - j * y_len/numPoints);
@@ -66,6 +66,7 @@ int main(int argc, char **argv) {
 
     // Send a few setpoints before starting
     for(int i = 100; ros::ok() && i > 0; --i){
+	goals[0].header.stamp = ros::Time::now();
         local_pos_pub.publish((goals[0]));
         ros::spinOnce();
         rate.sleep();
@@ -87,24 +88,19 @@ int main(int argc, char **argv) {
     bool landingStarted = false;
     while(ros::ok() && !missionDone) {
 
-	// Switch to offboard mode
-        if(current_state.mode != "OFFBOARD" && (ros::Time::now() - last_request > ros::Duration(5.0))) {
-            if(set_mode_client.call(offb_set_mode) && offb_set_mode.response.mode_sent)
-                ROS_INFO("Offboard enabled");
-            last_request = ros::Time::now();
-	// Arm drone
-        } else {
+	if(current_state.mode == "OFFBOARD"){
             if(!current_state.armed && (ros::Time::now() - last_request > ros::Duration(5.0))) {
-                if(arming_client.call(arm_cmd) && arm_cmd.response.success)
+                if(arming_client.call(arm_cmd) && arm_cmd.response.success){
                     ROS_INFO("Vehicle armed");
+		}
                 last_request = ros::Time::now();
             }
-        }
         if(tracker.checkTimeToLand()){
             tracker.startLanding(rate);
             missionDone = true;
         }
         else{
+	    goals[cur_goal_idx].header.stamp = ros::Time::now();
             local_pos_pub.publish((goals[cur_goal_idx]));
             if(check_waypoint_reached((goals[cur_goal_idx]))) {
                 ROS_INFO_STREAM("Waypoint" << cur_goal_idx << " reached");
@@ -116,6 +112,10 @@ int main(int argc, char **argv) {
                 }
             }
         }
+	}
+	else{
+		local_pos_pub.publish(goals[0]);
+	}
 
         ros::spinOnce();
         rate.sleep();

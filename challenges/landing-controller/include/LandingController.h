@@ -8,8 +8,9 @@
 #include "geometry_msgs/PoseStamped.h"
 
 #define LAND_HEIGHT 1 // Height at which to send the land command (in meters)
-#define ERROR_THRESHOLD 0.05 // where error is how far from the center of the image the line/marker is
-#define DESCENT_RATE 0.5
+#define ERROR_THRESHOLD 0.2 // where error is how far from the center of the image the line/marker is
+#define DESCENT_RATE 0.2
+#define SAFETY_RADIUS 2 // Safety radius when landing in meters
 
 class LandingController{
 private:
@@ -26,6 +27,8 @@ private:
     geometry_msgs::Pose current_pose;
     double prev_x;
     double prev_y;
+    double start_x;
+    double start_y;
 
 public:
     LandingController(ros::NodeHandle& nh, double xy_gain, double K_d);

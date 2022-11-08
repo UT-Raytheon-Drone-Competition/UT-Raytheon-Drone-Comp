@@ -5,7 +5,8 @@ from std_msgs.msg import Float64
 from cv_bridge import CvBridge
 import numpy as np
 import cv2
-from scipy.spatial import distance
+import math
+# from scipy.spatial import distance
 
 
 rospy.init_node('line_tracker')
@@ -38,7 +39,8 @@ def get_contour_closest_to_middle(contours, image_center):
         cx = int(M['m10'] / M['m00']) if M['m00'] != 0 else 0
         cy = int(M['m01'] / M['m00']) if M['m00'] != 0 else 0
         contour_center = (cx, cy)
-        distance_to_center = (distance.euclidean(image_center, contour_center))
+        # distance_to_center = (distance.euclidean(image_center, contour_center))
+        distance_to_center = math.sqrt(pow(image_center[0]-contour_center[0],2)+pow(image_center[1]-contour_center[1],2))
 
         if distance_to_center < closest_contour_distance and aspect_ratio > .95:
             closest_contour = c
@@ -55,7 +57,7 @@ def image_cb(msg):
     # Color thresholding
     ret, thresh = cv2.threshold(blur, 200, 255, cv2.THRESH_BINARY)
     # Find the contours of the frame
-    contours, hierarchy = cv2.findContours(thresh.copy(), 1, cv2.CHAIN_APPROX_NONE)
+    contours, hierarchy = cv2.findContours(thresh.copy(), 1, cv2.CHAIN_APPROX_NONE)[-2:]
 
     (h, w) = blur.shape[:2]
     image_center = (w // 2, h // 2)
@@ -68,13 +70,15 @@ def image_cb(msg):
         cv2.line(blur, (cx, 0), (cx, msg.height), (255, 0, 0), 1)
         cv2.line(blur, (0, cy), (msg.width, cy), (255, 0, 0), 1)
         cv2.drawContours(blur, contours, -1, (0, 255, 0), 1)
-        line_coord_pub.publish((cy/msg.height)*2-1)
+        line_coord_pub.publish((float(cy)/float(msg.height))*2-1)
         debug_image_pub.publish(bridge.cv2_to_imgmsg(blur))
+    else:
+        line_coord_pub.publish(0)
 
     # else:
     #     print("No lines detected")
 
     # cv2.imshow('frame', blur)
 
-rospy.Subscriber("/rrbot/camera1/image_raw", Image, image_cb)
+rospy.Subscriber("/usb_cam/image_raw", Image, image_cb)
 rospy.spin()

@@ -17,7 +17,9 @@
 
 nav_msgs::Odometry current_pose_g;
 
-bool check_waypoint_reached(geometry_msgs::PoseStamped goal, float pos_tolerance=1, float heading_tolerance=0.01) {
+
+
+bool check_waypoint_reached(geometry_msgs::PoseStamped goal, float pos_tolerance=1.5, float heading_tolerance=0.01) {
 
     // Check for correct position 
     float deltaX = abs(goal.pose.position.x - current_pose_g.pose.pose.position.x);
@@ -51,11 +53,9 @@ void pos_callback(const nav_msgs::Odometry::ConstPtr& msg) {
 std::vector<geometry_msgs::PoseStamped> generate_waypoints(std::vector<double>& x, std::vector<double>& y, double z, tf::Quaternion q){
     std::vector<geometry_msgs::PoseStamped> goals;
     for(int i = 0; i < x.size(); i++){
-        double x_coor = x[i];
-        double y_coor = y[i];
         geometry_msgs::PoseStamped goal;
-        goal.pose.position.x = x_coor;
-        goal.pose.position.y = y_coor;
+        goal.pose.position.x = x[i];
+        goal.pose.position.y = y[i];
         goal.pose.position.z = z;
         quaternionTFToMsg(q, goal.pose.orientation);
         goals.push_back(goal);
@@ -79,20 +79,22 @@ public:
     {
         downward_april_sub = nh->subscribe<apriltag_ros::AprilTagDetectionArray>
             ("/tag_detections", 1, &TagTracker::downward_april_callback, this);
-        freshData = false;
+        x_error = 0;
+	y_error = 0;
+	freshData = false;
     }
     void downward_april_callback(const apriltag_ros::AprilTagDetectionArray::ConstPtr& msg){
         if(timeToLand){
             for(auto& detection : msg->detections){
-                x_error = detection.pose.pose.pose.position.x; // TODO: Check coordinate axes
-                y_error = detection.pose.pose.pose.position.y; // TODO: scale these errors accordingly
-                freshData = true;
+                x_error = -1*detection.pose.pose.pose.position.x; // TODO: Check coordinate axes
+                y_error = -1*detection.pose.pose.pose.position.y; // TODO: scale these errors accordingly
+		freshData = true;
                 return;
             }
         }
         if(msg->detections.size() > 0){
             consecutive_frames++;
-            if(consecutive_frames > 10){
+            if(consecutive_frames > 4){
                 timeToLand = true;
             }
         }else{
@@ -105,11 +107,12 @@ public:
     void startLanding(ros::Rate& rate){
         ROS_INFO("Found tag, starting landing");
         LandingController lander(*n, 0.6, 0.4);// TODO: tune xy_gains
-        while(!lander.landed()){
-            if(freshData){
+        while(ros::ok() && !lander.landed()) {
+            //if(freshData){
+		ROS_INFO_STREAM("x: " << x_error << ", y: " << y_error);    
                 lander.update(x_error, y_error);
                 freshData = false;
-            }
+            //}
             ros::spinOnce();
             rate.sleep();
         }

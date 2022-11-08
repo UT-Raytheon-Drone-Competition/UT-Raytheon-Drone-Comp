@@ -15,6 +15,10 @@ void line_coord_callback(const std_msgs::Float64::ConstPtr& msg){
     }
 }
 
+void altitude_callback(const sensor_msgs::Range::ConstPtr& msg){
+    current_pose_g.pose.pose.position.z = msg->range; 
+}
+
 int main(int argc, char **argv) {
     ros::init(argc, argv, "offb_node");
 
@@ -24,9 +28,11 @@ int main(int argc, char **argv) {
     ros::Subscriber state_sub = nh.subscribe<mavros_msgs::State>
             ("mavros/state", 1, state_callback);
     ros::Subscriber pose_sub = nh.subscribe<nav_msgs::Odometry>
-            ("mavros/odometry/in", 1, pos_callback);
+            ("mavros/local_position/odom", 1, pos_callback);
     ros::Subscriber line_coord_sub = nh.subscribe<std_msgs::Float64>
             ("/line_coordinates", 1, line_coord_callback);
+    ros::Subscriber altitude_sub = nh.subscribe<sensor_msgs::Range>
+	    ("/mavros/altitude/local", 1, altitude_callback);
 
     ros::Publisher local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>
             ("mavros/setpoint_position/local", 1);
@@ -61,33 +67,12 @@ int main(int argc, char **argv) {
     geometry_msgs::PoseStamped pose1;
     pose1.pose.position.x = 0;
     pose1.pose.position.y = 0;
-    pose1.pose.position.z = 6;
+    pose1.pose.position.z = 5;
+    // pose1.header.frame_id = "local_origin";
+    pose1.header.stamp = ros::Time::now();
     quaternionTFToMsg(q, pose1.pose.orientation);
-/*
-    std::vector<geometry_msgs::PoseStamped*> goals;
-    goals.push_back(&pose1);
 
-    for (int i = 1; i < 28; i++) {
-        geometry_msgs::PoseStamped pose;
-        pose.pose.position.x = 0;
-        pose.pose.position.y = 0;
-        pose.pose.position.z = 6;
-        quaternionTFToMsg(q, pose.pose.orientation);
-	goals.push_back(&pose);
-    }
-*/
-/*
-    geometry_msgs::PoseStamped pose2;
-    pose2.pose.position.x = 0;
-    pose2.pose.position.y = 27.432;
-    pose2.pose.position.z = 6;
-    quaternionTFToMsg(q, pose2.pose.orientation);
-
-    std::vector<geometry_msgs::PoseStamped*> goals;
-    goals.push_back(&pose1);
-    goals.push_back(&pose2);
-*/
-
+    ROS_INFO_STREAM("takeoff altitude: " << pose1.pose.position.z);
     // Send a few setpoints before starting
     for(int i = 100; ros::ok() && i > 0; --i){
         local_pos_pub.publish(pose1);
@@ -105,49 +90,55 @@ int main(int argc, char **argv) {
 
     ros::Time last_request = ros::Time::now();
     int cur_goal_idx = 0;
-    int ypos = 0;
+    double ypos = 0;
 
     bool missionDone = false;
+    bool startDescent = false;
     LandingController lander(nh, 1, 0); // TODO: tune xy gain
+    double last_waypoint_time = 0.0;
 
     while(ros::ok() && !missionDone) {
-        if(!landing){
-        // Switch to offboard mode
-            if(current_state.mode != "OFFBOARD" && (ros::Time::now() - last_request > ros::Duration(5.0))) {
-                if(set_mode_client.call(offb_set_mode) && offb_set_mode.response.mode_sent)
-                    ROS_INFO("Offboard enabled");
-                last_request = ros::Time::now();
-        // Arm drone
-            } else {
-                if(!current_state.armed && (ros::Time::now() - last_request > ros::Duration(5.0))) {
-                    if(arming_client.call(arm_cmd) && arm_cmd.response.success)
-                        ROS_INFO("Vehicle armed");
-                    last_request = ros::Time::now();
-                }
-            }
+	if(current_state.mode == "OFFBOARD"){
+		ROS_INFO_ONCE("STARTING MISSION");
+		if(!landing){
+			if(!current_state.armed && (ros::Time::now() - last_request > ros::Duration(5.0))) {
+			    if(arming_client.call(arm_cmd) && arm_cmd.response.success)
+				    ROS_INFO("Vehicle armed");
+			    last_request = ros::Time::now();
+		}
 
-            geometry_msgs::PoseStamped pose;
-                pose.pose.position.x = 0;
-                pose.pose.position.y = ypos;
-                pose.pose.position.z = 6;
-                quaternionTFToMsg(q, pose.pose.orientation);
+		    geometry_msgs::PoseStamped pose;
+			pose.pose.position.x = 0;
+			pose.pose.position.y = ypos;
+			pose.pose.position.z = 5;
+			quaternionTFToMsg(q, pose.pose.orientation);
+		    // pose.header.frame_id = "local_origin";
+		    pose.header.stamp = ros::Time::now();
 
-            local_pos_pub.publish(pose);
-            if(check_waypoint_reached(pose)) {
-                ROS_INFO_STREAM("Waypoint" << ypos << " reached");
-                ypos++;	
-                if(ypos > 1) {
-                    ROS_INFO("Landing");
-                    landing = true;
-                }
-            }
-        }
-        else{
-            lander.update(0,y_error);
-            if(lander.landed()){
-                missionDone = true;
-            }
-        }
+		    local_pos_pub.publish(pose);
+		    if(check_waypoint_reached(pose)) {
+			ROS_INFO_STREAM("Waypoint" << ypos << " reached");
+			ypos+=4.572;	
+			if(ypos > 28) {
+			    ROS_INFO("Landing");
+			    landing = true;
+			    last_waypoint_time = ros::Time::now().toSec();
+
+			}
+		    }
+		}
+		else{
+		    if(ros::Time::now().toSec()-last_waypoint_time > 5){
+			lander.update(0,y_error);
+			if(lander.landed()){
+			    missionDone = true;
+			}
+		    }
+		}
+	}
+	else{
+		local_pos_pub.publish(pose1);
+	}
 
         ros::spinOnce();
         rate.sleep();

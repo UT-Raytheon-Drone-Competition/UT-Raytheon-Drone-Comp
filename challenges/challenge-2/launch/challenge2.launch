@@ -1,6 +1,7 @@
 <launch>
         <!-- Launch file for challenge 2-->
         <arg name="fcu_url" default="/dev/ttyUSB0:921600"/>
+	<arg name="respawn_mavros" default="true"/>
         <!-- Launch MAVROS -->
         <include file="$(find mavros)/launch/px4.launch">
                 <!-- GCS link is provided by SITL -->
@@ -9,15 +10,7 @@
                 <arg name="respawn_mavros" value="$(arg respawn_mavros)"/>
         </include>
         <!-- Launch ZED -->
-        <include file="$(find zed_wrapper)/launch/zed2.launch"/>
-        <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
-            <param name="video_device" value="/dev/video0" />
-            <param name="image_width" value="640" />
-            <param name="image_height" value="480" />
-            <param name="pixel_format" value="yuyv" />
-            <param name="camera_frame_id" value="usb_cam" />
-            <param name="io_method" value="mmap"/>
-        </node>
-        <include file="$(find apriltags2_ros)/launch/continuous_detection.launch"/>
-        <node pkg="challenge-2" name="challenge-2_node" type="challenge-2_node" />
+	<include file="$(find usb_cam)/launch/usb_cam-test.launch"/>
+        <include file="$(find apriltag_ros)/launch/continuous_detection.launch"/>
+        <!-- node pkg="challenge_2" name="challenge_2_node" type="challenge_2_node"/ -->
 </launch>

@@ -1,6 +1,8 @@
 <launch>
         <!-- Launch file for challenge 1-->
         <arg name="fcu_url" default="/dev/ttyUSB0:921600"/>
+        <arg name="respawn_mavros" value="true"/>
+        <!--remap from="/mavros/vision_pose/pose_cov" to="/zed2/zed_node/pose_with_covariance"/-->
         <!-- Launch MAVROS -->
         <include file="$(find mavros)/launch/px4.launch">
                 <!-- GCS link is provided by SITL -->
@@ -9,6 +11,7 @@
                 <arg name="respawn_mavros" value="$(arg respawn_mavros)"/>
         </include>
         <!-- Launch ZED -->
-        <include file="$(find zed_wrapper)/launch/zed2.launch"/>
-        <node pkg="challenge-1" name="challenge-1_node" type="challenge-1_node" />
+	<include file="$(find usb_cam)/launch/usb_cam-test.launch"/>
+        <node pkg="line_tracker" type="LineTracker.py" name="line_tracker"/>
+	<!-- node pkg="challenge_1" name="challenge_1_node" type="challenge_1_node"/-->
 </launch>
