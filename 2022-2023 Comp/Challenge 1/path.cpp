@@ -34,22 +34,22 @@ int main(int argc, char** argv)
   nextWayPoint.z = zPos;
   nextWayPoint.psi = 0;
   waypointLiar.push_back(nextWayPoint);
-  nextWayPoint.x = -4;//align with first ugv row 
-  nextWayPoint.y = 4;
+  nextWayPoint.x = -3.66;//align with first ugv row 
+  nextWayPoint.y = 3.66;
   nextWayPoint.z = zPos;
   nextWayPoint.psi = 0;
   waypointLiar.push_back(nextWayPoint);
-  if (int i = 1; (xPos-4) < 50; i++)
+  if (int i = 1; (xPos-3.66) < 45.72; i++)
     {
       if (i%2 == 0)
 	{
 	  waypointLiar.push_back(nextWayPoint);
 	  nextWayPoint.x = xPos;
-	  nextWayPoint.y = yPos-42;
+	  nextWayPoint.y = yPos-38.4;
 	  nextWayPoint.z = zPos;
 	  nextWayPoint.psi = 0;
 	  waypointLiar.push_back(nextWayPoint);
-	  nextWayPoint.x = xPos-4;
+	  nextWayPoint.x = xPos-3.66;
 	  nextWayPoint.y = yPos;
 	  nextWayPoint.z = zPos;
 	  nextWayPoint.psi = 0;
@@ -58,11 +58,11 @@ int main(int argc, char** argv)
       else 
 	{
 	  nextWayPoint.x = xPos;
-	  nextWayPoint.y = yPos+42;
+	  nextWayPoint.y = yPos+38.4;
 	  nextWayPoint.z = zPos;
 	  nextWayPoint.psi = 0;
 	  waypointLiar.push_back(nextWayPoint);
-	  nextWayPoint.x = xPos-4;
+	  nextWayPoint.x = xPos-3.66;
 	  nextWayPoint.y = yPos;
 	  nextWayPoint.z = zPos;
 	  nextWayPoint.psi = 0;
@@ -70,9 +70,9 @@ int main(int argc, char** argv)
 	}
     }
   
-  nextWayPoint.x = -51;//cross finish line
+  nextWayPoint.x = -46.6;//cross finish line
   nextWayPoint.y = yPos;
-  nextWayPoint.z = 10;
+  nextWayPoint.z = 7.32;
   nextWayPoint.psi = 0;
   waypointList.push_back(nextWayPoint);//since drone at 9 feet sees about 9*9 it is better if we move to x= -4.5. Moving drone to 4.5 puts it in the middle of first ugv row 
   
