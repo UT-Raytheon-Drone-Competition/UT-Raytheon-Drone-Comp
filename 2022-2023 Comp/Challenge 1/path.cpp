@@ -33,27 +33,27 @@ int main(int argc, char** argv)
   nextWayPoint.y = yPos;
   nextWayPoint.z = zPos;
   nextWayPoint.psi = 0;
-  waypointLiar.push_back(nextWayPoint);
+  waypointList.push_back(nextWayPoint);
   nextWayPoint.x = -3.66;//align with first ugv row 
   nextWayPoint.y = 3.66;
   nextWayPoint.z = zPos;
   nextWayPoint.psi = 0;
-  waypointLiar.push_back(nextWayPoint);
+  waypointList.push_back(nextWayPoint);
   if (int i = 1; (xPos-3.66) < 45.72; i++)
     {
       if (i%2 == 0)
 	{
-	  waypointLiar.push_back(nextWayPoint);
+	  waypointList.push_back(nextWayPoint);
 	  nextWayPoint.x = xPos;
 	  nextWayPoint.y = yPos-38.4;
 	  nextWayPoint.z = zPos;
 	  nextWayPoint.psi = 0;
-	  waypointLiar.push_back(nextWayPoint);
+	  waypointList.push_back(nextWayPoint);
 	  nextWayPoint.x = xPos-3.66;
 	  nextWayPoint.y = yPos;
 	  nextWayPoint.z = zPos;
 	  nextWayPoint.psi = 0;
-	  waypointLiar.push_back(nextWayPoint);
+	  waypointList.push_back(nextWayPoint);
 	}
       else 
 	{
@@ -61,12 +61,12 @@ int main(int argc, char** argv)
 	  nextWayPoint.y = yPos+38.4;
 	  nextWayPoint.z = zPos;
 	  nextWayPoint.psi = 0;
-	  waypointLiar.push_back(nextWayPoint);
+	  waypointList.push_back(nextWayPoint);
 	  nextWayPoint.x = xPos-3.66;
 	  nextWayPoint.y = yPos;
 	  nextWayPoint.z = zPos;
 	  nextWayPoint.psi = 0;
-	  waypointLiar.push_back(nextWayPoint);
+	  waypointList.push_back(nextWayPoint);
 	}
     }
   

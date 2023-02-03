@@ -1,6 +1,56 @@
 #include <gnc_functions.hpp>
 //include API 
 
+void nextRowWayPoint (double xPos, double yPos)//make a waypoint to the next row
+{
+
+}
+void reverseSearch (std::vector<gnc_api_waypoint> wayPointList)
+{
+  gnc_api_waypoint nextWayPoint;
+  double xPos = 45.72 - 3.66;
+  dobule yPos = 45.72 - 3.66;
+  double zPos = 8;
+  nextWayPoint.x = xPos;
+  nextWayPoint.y = yPos;
+  nextWayPoint.z = zPos;
+  nextWayPoint.psi = 0;
+  waypointList.push_back(nextWayPoint);
+
+  if (int i = 1; (yPos - 7.32) > 3.66; i++)//|-     
+    {
+      if (i%2 == 0)
+        {
+          waypointList.push_back(nextWayPoint);
+	  xPos = 45.72-3.66;
+          nextWayPoint.x = xPos;
+          nextWayPoint.y = yPos;
+          nextWayPoint.z = zPos;
+          nextWayPoint.psi = 0;
+          waypointList.push_back(nextWayPoint);
+          nextWayPoint.x = xPos;
+          nextWayPoint.y = yPos-7.32;
+          nextWayPoint.z = zPos;
+          nextWayPoint.psi = 0;
+          waypointList.push_back(nextWayPoint);
+        }
+      else//-|
+        {
+	  xPos = -3.66;
+          nextWayPoint.x = xPos;
+          nextWayPoint.y = yPos;
+          nextWayPoint.z = zPos;
+          nextWayPoint.psi = 0;
+          waypointList.push_back(nextWayPoint);
+	  yPos = yPos -7.32;
+          nextWayPoint.x = xPos;
+          nextWayPoint.y = yPos;
+          nextWayPoint.z = zPos;
+          nextWayPoint.psi = 0;
+          waypointList.push_back(nextWayPoint);
+        }
+    }  
+}
 int main(int argc, char** argv)
 {
   //initialize ros 
@@ -33,45 +83,13 @@ int main(int argc, char** argv)
   nextWayPoint.y = yPos;
   nextWayPoint.z = zPos;
   nextWayPoint.psi = 0;
-  waypointLiar.push_back(nextWayPoint);
+  waypointList.push_back(nextWayPoint);
   nextWayPoint.x = -3.66;//align with first ugv row 
   nextWayPoint.y = 3.66;
   nextWayPoint.z = zPos;
   nextWayPoint.psi = 0;
-  waypointLiar.push_back(nextWayPoint);
-  if (int i = 1; (xPos-3.66) < 45.72; i++)
-    {
-      if (i%2 == 0)//L
-	{
-	  waypointLiar.push_back(nextWayPoint);
-	  nextWayPoint.x = xPos;
-	  nextWayPoint.y = yPos-38.4;
-	  nextWayPoint.z = zPos;
-	  nextWayPoint.psi = 0;
-	  waypointLiar.push_back(nextWayPoint);
-	  nextWayPoint.x = xPos-3.66;
-	  nextWayPoint.y = yPos;
-	  nextWayPoint.z = zPos;
-	  nextWayPoint.psi = 0;
-	  waypointLiar.push_back(nextWayPoint);
-	}
-      else // | -
-	{
-	  nextWayPoint.x = xPos;
-	  nextWayPoint.y = yPos+38.4;
-	  nextWayPoint.z = zPos;
-	  nextWayPoint.psi = 0;
-	  waypointLiar.push_back(nextWayPoint);
-	  nextWayPoint.x = xPos-3.66;
-	  nextWayPoint.y = yPos;
-	  nextWayPoint.z = zPos;
-	  nextWayPoint.psi = 0;
-	  waypointLiar.push_back(nextWayPoint);
-	}
-    }
-  //check area again if not all ugv hit
-
- 
+  waypointList.push_back(nextWayPoint);
+  
   nextWayPoint.x = -46.6;//cross finish line
   nextWayPoint.y = yPos;
   nextWayPoint.z = 7.32;
@@ -84,15 +102,15 @@ int main(int argc, char** argv)
   nextWayPoint.y = yPos;
   nextWayPoint.z = zPos;
   nextWayPoint.psi = 0;
-  waypointLiar.push_back(nextWayPoint);
+  waypointList.push_back(nextWayPoint);
   nextWayPoint.x = -3.66;//align with first ugv row
   nextWayPoint.y = 3.66;
   nextWayPoint.z = zPos;
   nextWayPoint.psi = 0;
-  waypointLiar.push_back(nextWayPoint);
+  waypointList.push_back(nextWayPoint);
 
 
-  waypointLiar.push_back(nextWayPoint);//go to the end of first row. Aka search first row for UGV
+  waypointList.push_back(nextWayPoint);//go to the end of first row. Aka search first row for UGV
   nextWayPoint.x = xPos;
   nextWayPoint.y = yPos-38.4;
   nextWayPoint.z = zPos;
@@ -105,7 +123,7 @@ int main(int argc, char** argv)
     {
       ros::spinOnce();
       rate.sleep();
-      UGVx = -0.0381 //UGVs are moving .031 meters per .5 seconds 
+      UGVx = UGVx-0.0381  //UGVs are moving .031 meters per .5 seconds 
 
 	/*if (ugv detected)
 	    if (friendly)
