@@ -22,6 +22,7 @@
 #include <ros/duration.h>
 #include <iostream>
 #include <string>
+#include <tf/transform_datatypes.h>
 
 
 
@@ -255,20 +256,37 @@ Wait for strat will hold the program until the user signals the FCU to enther mo
 */
 int wait4start()
 {
-  ROS_INFO("Waiting for user to set mode to GUIDED");
-  while(ros::ok() && current_state_g.mode != "GUIDED")
-    {
-      ros::spinOnce();
-      ros::Duration(0.01).sleep();
+  ROS_INFO("setting mode to OFFBOARD");
+  // Send a few setpoints before starting
+  set_destination(0,0,0,0);
+  for(int i = 100; ros::ok() && i > 0; --i){
+    local_pos_pub.publish(waypoint_g);
+    ros::spinOnce();
+    ros::Duration(0.05).sleep();
+  }
+
+  // Set drone to Offboard mode
+  mavros_msgs::SetMode offb_set_mode;
+  offb_set_mode.request.custom_mode = "OFFBOARD";
+
+  ros::Time last_request = ros::Time::now();
+
+  while(ros::ok() && current_state_g.mode != "OFFBOARD") {
+    if(current_state_g.mode != "OFFBOARD" && (ros::Time::now() - last_request > ros::Duration(5.0))) {
+      if(set_mode_client.call(offb_set_mode) && offb_set_mode.response.mode_sent){
+        ROS_INFO("Offboard enabled");
+      }
+      last_request = ros::Time::now();
     }
-  if(current_state_g.mode == "GUIDED")
-    {
-      ROS_INFO("Mode set to GUIDED. Mission starting");
-      return 0;
-    }else{
+    ros::spinOnce();
+  }
+  if(current_state_g.mode == "OFFBOARD") {
+    ROS_INFO("Mode set to OFFBOARD. Mission starting");
+    return 0;
+  }else{
     ROS_INFO("Error starting mission!!");
-return -1;
-}
+    return -1;
+  }
 }
 /**
 \ingroup control_functions
@@ -277,69 +295,70 @@ This function will create a local reference frame based on the starting location
 */
 int initialize_local_frame()
 {
-//set the orientation of the local reference frame
-ROS_INFO("Initializing local coordinate system");
-local_offset_g = 0;
-for (int i = 1; i <= 30; i++) {
-ros::spinOnce();
-ros::Duration(0.1).sleep();
+  //set the orientation of the local reference frame
+  ROS_INFO("Initializing local coordinate system");
+  local_offset_g = 0;
+  for (int i = 1; i <= 30; i++) {
+    ros::spinOnce();
+    ros::Duration(0.1).sleep();
+   
 
-
-
-float q0 = current_pose_g.pose.pose.orientation.w;
-float q1 = current_pose_g.pose.pose.orientation.x;
-float q2 = current_pose_g.pose.pose.orientation.y;
-float q3 = current_pose_g.pose.pose.orientation.z;
-float psi = atan2((2*(q0*q3 + q1*q2)), (1 - 2*(pow(q2,2) + pow(q3,2))) ); // yaw
-
-local_offset_g += psi*(180/M_PI);
-
-local_offset_pose_g.x = local_offset_pose_g.x + current_pose_g.pose.pose.position.x;
-local_offset_pose_g.y = local_offset_pose_g.y + current_pose_g.pose.pose.position.y;
-local_offset_pose_g.z = local_offset_pose_g.z + current_pose_g.pose.pose.position.z;
-// ROS_INFO("current heading%d: %f", i, local_offset_g/i);
-}
-local_offset_pose_g.x = local_offset_pose_g.x/30;
-local_offset_pose_g.y = local_offset_pose_g.y/30;
-local_offset_pose_g.z = local_offset_pose_g.z/30;
-local_offset_g /= 30;
-ROS_INFO("Coordinate offset set");
-ROS_INFO("the X' axis is facing: %f", local_offset_g);
-return 0;
+    
+    float q0 = current_pose_g.pose.pose.orientation.w;
+    float q1 = current_pose_g.pose.pose.orientation.x;
+    float q2 = current_pose_g.pose.pose.orientation.y;
+    float q3 = current_pose_g.pose.pose.orientation.z;
+    float psi = atan2((2*(q0*q3 + q1*q2)), (1 - 2*(pow(q2,2) + pow(q3,2))) ); // yaw
+    
+    local_offset_g += psi*(180/M_PI);
+    
+    local_offset_pose_g.x = local_offset_pose_g.x + current_pose_g.pose.pose.position.x;
+    local_offset_pose_g.y = local_offset_pose_g.y + current_pose_g.pose.pose.position.y;
+    local_offset_pose_g.z = local_offset_pose_g.z + current_pose_g.pose.pose.position.z;
+    // ROS_INFO("current heading%d: %f", i, local_offset_g/i);
+  }
+  local_offset_pose_g.x = local_offset_pose_g.x/30;
+  local_offset_pose_g.y = local_offset_pose_g.y/30;
+  local_offset_pose_g.z = local_offset_pose_g.z/30;
+  local_offset_g /= 30;
+  ROS_INFO("Coordinate offset set");
+  ROS_INFO("the X' axis is facing: %f", local_offset_g);
+  return 0;
 }
 
 int arm()
 {
-//intitialize first waypoint of mission
-set_destination(0,0,0,0);
-for(int i=0; i<100; i++)
-{
-local_pos_pub.publish(waypoint_g);
-ros::spinOnce();
-ros::Duration(0.01).sleep();
-}
-// arming
-ROS_INFO("Arming drone");
-mavros_msgs::CommandBool arm_request;
-arm_request.request.value = true;
-while (!current_state_g.armed && !arm_request.response.success && ros::ok())
-{
-ros::Duration(.1).sleep();
-arming_client.call(arm_request);
-local_pos_pub.publish(waypoint_g);
-}
-if(arm_request.response.success)
-{
-ROS_INFO("Arming Successful");
-return 0;
-}else{
-ROS_INFO("Arming failed with %d", arm_request.response.success);
-return -1;
-}
+  //intitialize first waypoint of mission
+  set_destination(0,0,0,0);
+  for(int i=0; i<100; i++)
+    {
+      local_pos_pub.publish(waypoint_g);
+      ros::spinOnce();
+      ros::Duration(0.01).sleep();
+    }
+  // arming
+  ROS_INFO("Arming drone");
+  mavros_msgs::CommandBool arm_request;
+  arm_request.request.value = true;
+  while (!current_state_g.armed && !arm_request.response.success && ros::ok())
+    {
+      ros::Duration(.1).sleep();
+      arming_client.call(arm_request);
+      local_pos_pub.publish(waypoint_g);
+    }
+  if(arm_request.response.success)
+    {
+      ROS_INFO("Arming Successful");
+      return 0;
+    }
+  else{
+    ROS_INFO("Arming failed with %d", arm_request.response.success);
+    return -1;
+  }
 }
 
 /**
-\ingroup control_functions
+   \ingroup control_functions
 The takeoff function will arm the drone and put the drone in a hover above the initial position. 
 @returns 0 - nominal takeoff 
 @returns -1 - failed to arm 
@@ -347,51 +366,51 @@ The takeoff function will arm the drone and put the drone in a hover above the i
 */
 int takeoff(float takeoff_alt)
 {
-//intitialize first waypoint of mission
-set_destination(0,0,takeoff_alt,0);
-for(int i=0; i<100; i++)
-{
-local_pos_pub.publish(waypoint_g);
-ros::spinOnce();
-ros::Duration(0.01).sleep();
-}
-// arming
-ROS_INFO("Arming drone");
-mavros_msgs::CommandBool arm_request;
-arm_request.request.value = true;
-while (!current_state_g.armed && !arm_request.response.success && ros::ok())
-{
-ros::Duration(.1).sleep();
-arming_client.call(arm_request);
-local_pos_pub.publish(waypoint_g);
-}
-if(arm_request.response.success)
-{
-ROS_INFO("Arming Successful");
-}else{
-ROS_INFO("Arming failed with %d", arm_request.response.success);
-return -1;
-}
-
+  //intitialize first waypoint of mission
+  set_destination(0,0,takeoff_alt,0);
+  for(int i=0; i<100; i++) {
+    local_pos_pub.publish(waypoint_g);
+    ros::spinOnce();
+    ros::Duration(0.01).sleep();
+  }
+  // arming
+  ROS_INFO("Arming drone");
+  mavros_msgs::CommandBool arm_request;
+  arm_request.request.value = true;
+  while (!current_state_g.armed && !arm_request.response.success && ros::ok())
+    {
+      ros::Duration(.1).sleep();
+      arming_client.call(arm_request);
+      local_pos_pub.publish(waypoint_g);
+    }
+    if(arm_request.response.success)
+      {
+        ROS_INFO("Arming Successful");
+      }
+    else{
+      ROS_INFO("Arming failed with %d", arm_request.response.success);
+      return -1;
+  }
+  
 //request takeoff
- 
- mavros_msgs::CommandTOL srv_takeoff;
- srv_takeoff.request.altitude = takeoff_alt;
- if(takeoff_client.call(srv_takeoff)){
-   sleep(3);
-   ROS_INFO("takeoff sent %d", srv_takeoff.response.success);
- }else{
-   ROS_ERROR("Failed Takeoff");
-   return -2;
- }
- sleep(2);
- return 0; 
+  
+  // mavros_msgs::CommandTOL srv_takeoff;
+  // srv_takeoff.request.altitude = takeoff_alt;
+  // if(takeoff_client.call(srv_takeoff)){
+  //  sleep(3);
+  //  ROS_INFO("takeoff sent %d", srv_takeoff.response.success);
+  // }else{
+  //   ROS_ERROR("Failed Takeoff");
+  //   return -2;
+  // }
+  // sleep(2);
+  return 0; 
 }
 /**
-\ingroup control_functions
-This function returns an int of 1 or 0. THis function can be used to check when to request the next waypoint in the mission. 
-@return 1 - waypoint reached 
-@return 0 - waypoint not reached
+   \ingroup control_functions
+   This function returns an int of 1 or 0. THis function can be used to check when to request the next waypoint in the mission. 
+   @return 1 - waypoint reached 
+   @return 0 - waypoint not reached
 */
 int check_waypoint_reached(float pos_tolerance=0.3, float heading_tolerance=0.01)
 {
@@ -408,13 +427,13 @@ int check_waypoint_reached(float pos_tolerance=0.3, float heading_tolerance=0.01
   //check orientation
   float cosErr = cos(current_heading_g*(M_PI/180)) - cos(local_desired_heading_g*(M_PI/180));
   float sinErr = sin(current_heading_g*(M_PI/180)) - sin(local_desired_heading_g*(M_PI/180));
-    
+  
   float headingErr = sqrt( pow(cosErr, 2) + pow(sinErr, 2) );
-
+  
   // ROS_INFO("current heading %f", current_heading_g);
   // ROS_INFO("local_desired_heading_g %f", local_desired_heading_g);
   // ROS_INFO("current heading error %f", headingErr);
-
+  
   if( dMag < pos_tolerance && headingErr < heading_tolerance)
     {
       return 1;
@@ -423,10 +442,10 @@ int check_waypoint_reached(float pos_tolerance=0.3, float heading_tolerance=0.01
   }
 }
 /**
-\ingroup control_functions
-this function changes the mode of the drone to a user specified mode. This takes the mode as a string. ex. set_mode("GUIDED")
-@returns 1 - mode change successful
-@returns 0 - mode change not successful
+   \ingroup control_functions
+   this function changes the mode of the drone to a user specified mode. This takes the mode as a string. ex. set_mode("GUIDED")
+   @returns 1 - mode change successful
+   @returns 0 - mode change not successful
 */
 int set_mode(std::string mode)
 {
@@ -478,7 +497,8 @@ int set_speed(float speed__mps)
     {
       ROS_INFO("change speed command succeeded %d", speed_cmd.response.success);
       return 0;
-    }else{
+    }
+  else{
     ROS_ERROR("change speed command failed %d", speed_cmd.response.success);
     ROS_ERROR("change speed result was %d ", speed_cmd.response.result);
     return -1;
@@ -587,4 +607,7 @@ int init_publisher_subscriber(ros::NodeHandle controlnode)
   auto_waypoint_push_client = controlnode.serviceClient<mavros_msgs::WaypointPush>((ros_namespace + "/mavros/mission/push").c_str());
   auto_waypoint_set_current_client = controlnode.serviceClient<mavros_msgs::WaypointSetCurrent>((ros_namespace + "/mavros/mission/set_current").c_str());
   return 0;
+}
+
+int set_offboard(){
 }
