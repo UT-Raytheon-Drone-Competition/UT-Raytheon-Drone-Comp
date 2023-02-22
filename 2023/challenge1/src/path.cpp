@@ -13,14 +13,14 @@ int main(int argc, char** argv)
   // wait for FCU connection
   wait4connect();
 
-  //wait for used to switch to mode GUIDED
+  //wait for used to switch to mode OFFBOARD
   wait4start();
 
   //create local reference frame 
-  initialize_local_frame();
+  // initialize_local_frame();
 
   //request takeoff
-  takeoff(10);
+  takeoff(2);
 
   //specify some waypoints
   //drone looking south, starts at 0,0,0,0
@@ -91,6 +91,7 @@ int main(int argc, char** argv)
       //     land();
       //   }
       // }
+      set_destination(0,0,2,0);
       
     }
   return 0;

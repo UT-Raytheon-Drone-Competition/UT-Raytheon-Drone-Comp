@@ -258,10 +258,10 @@ int wait4start()
 {
   ROS_INFO("setting mode to OFFBOARD");
   // Send a few setpoints before starting
-  set_destination(0,0,0,0);
+  set_destination(0,0,2,0);
   for(int i = 100; ros::ok() && i > 0; --i){
     local_pos_pub.publish(waypoint_g);
-    ros::spinOnce();
+    // ros::spinOnce();
     ros::Duration(0.05).sleep();
   }
 
