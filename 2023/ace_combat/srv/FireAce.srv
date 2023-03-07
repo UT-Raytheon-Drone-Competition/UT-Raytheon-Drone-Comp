@@ -1,0 +1,9 @@
+# Request message format
+float64 latitude
+float64 longitude
+time timestamp
+int32 aruco_marker_id
+
+---
+# Response message format
+int32 status_code
