@@ -4,14 +4,16 @@ import rospy
 from ace_combat.srv import FireAce, FireAceResponse
 import irc.client
 
-CHANNEL = "#my-channel"
-IRC_MESSAGE = "RTXDC_2023 UT_UAV_Fire_{0}_{1}_{2} {3} {4}"
-IRC_ADDRESS = "irc.example.com" # TODO: Change this to a ros parameter
+CHANNEL = "#fire"
+IRC_MESSAGE = "RTXDC_2023 UT_UAV_Fire_{0}_{1}_{2}_{3}"
+IRC_ADDRESS = "127.0.0.1" # TODO: Change this to a ros parameter
 
 # Set up the IRC client and connect to the server
-client = irc.client.IRC()
-server = client.server()
-server.connect(IRC_ADDRESS, 6667, "my-nickname")
+client = irc.client.Reactor().server()
+client.connect(IRC_ADDRESS, 6667, "fire-server")
+
+def keep_alive(event):
+    client.ping(IRC_ADDRESS)
 
 def handle_my_service(req):
     # TODO: Fire ACE thing
@@ -25,7 +27,9 @@ def handle_my_service(req):
     
     # Send the IRC message to the server
     try:
-        server.privmsg(CHANNEL, message)
+        client.privmsg(CHANNEL, message)
+        rospy.loginfo("Sending IRC message: {}".format(message))
+        rospy.loginfo("Sent IRC message to channel {}".format(CHANNEL))
     except Exception as e:
         rospy.logerr("Failed to send IRC message: {}".format(str(e)))
         return FireAceResponse(status_code=1)
@@ -35,6 +39,7 @@ def handle_my_service(req):
 
 def my_service_server():
     rospy.init_node('ace_fire_server')
+    rospy.Timer(rospy.Duration(30), keep_alive)
     rospy.Service('ace_fire_service', FireAce, handle_my_service)
     rospy.spin()
 
