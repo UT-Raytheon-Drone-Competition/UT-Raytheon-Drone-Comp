@@ -6,15 +6,15 @@ bool previousEncoderState = 0;
 bool currentEncoderState = 0;
 
 // variables used in program
-unsigned int stepTimes[2];
-
-unsigned int totalSteps = 0;
-int speedIndex = 0; // tracks the index of the time tracking array for speed calculations
-int stepTimesLength = sizeof(stepTimes)/sizeof(stepTimes[0]);
-double deltaT;
+unsigned int stepTimes[2];  // array for tracking step times
+const int stepTimesLength = sizeof(stepTimes)/sizeof(stepTimes[0]);
+int speedIndex = 0;         // tracks the index of the time tracking array for speed calculations
 
 const double wheelDiameter = 0.13;
 const double travelPerRotation = wheelDiameter*PI;  // circumference of wheel 
+
+unsigned int totalSteps = 0;
+double deltaT;
 
 double rotations = 0.0;
 double currentSpeed = 0.0;
