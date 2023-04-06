@@ -24,7 +24,7 @@ double totalStepsForCalcs = 0.0;
 
 void setup() {
   // put your setup code here, to run once:
-
+  
   pinMode(digitalEncoderPin, INPUT); // set pin as digital in for encoder
   Serial.begin(9600);
 }
