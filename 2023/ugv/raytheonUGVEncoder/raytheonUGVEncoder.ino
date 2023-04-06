@@ -14,7 +14,7 @@ int stepTimesLength = sizeof(stepTimes)/sizeof(stepTimes[0]);
 double deltaT;
 
 const double wheelDiameter = 0.13;
-double travelPerRotation = wheelDiameter*PI;  // circumference of wheel 
+const double travelPerRotation = wheelDiameter*PI;  // circumference of wheel 
 
 double rotations = 0.0;
 double currentSpeed = 0.0;
