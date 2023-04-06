@@ -20,7 +20,6 @@ double rotations = 0.0;
 double currentSpeed = 0.0;
 double currentRPS = 0.0;
 double metersTraveled = 0.0;
-double totalStepsForCalcs = 0.0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -45,8 +44,7 @@ void stepDetected() {
 
 totalSteps++;
     
-totalStepsForCalcs = totalSteps;    // converts steps to double for calculations
-rotations = totalStepsForCalcs/40;  // finds the number of rotations completed based on the number of encoder state changes that should occur per rotation
+rotations = totalSteps/40.0;  // finds the number of rotations completed based on the number of encoder state changes that should occur per rotation
 metersTraveled = rotations*travelPerRotation;
 
 stepTimes[speedIndex] = millis();
