@@ -14,7 +14,7 @@ class IRCPublisher(irc.client.SimpleIRCClient):
     def __init__(self):
         irc.client.SimpleIRCClient.__init__(self)
         rospy.init_node('ace_fire_server')
-        # rospy.Timer(rospy.Duration(30), keep_alive)
+        rospy.Timer(rospy.Duration(30), self.keep_alive)
         self.service = rospy.Service('ace_fire_service', FireAce, self.handle_my_service)
         
     def on_welcome(self, connection, event):
@@ -23,6 +23,9 @@ class IRCPublisher(irc.client.SimpleIRCClient):
         
     def send_message(self, message):
         self.connection.privmsg("#fire", message)
+
+    def keep_alive(self, event):
+        self.connection.ping(IRC_ADDRESS)
 
     def handle_my_service(self, req):
         # TODO: Fire ACE thing
