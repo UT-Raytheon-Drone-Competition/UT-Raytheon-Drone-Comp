@@ -16,10 +16,10 @@ class IrcSubscriber(irc.client.SimpleIRCClient):
         self.pub = rospy.Publisher('irc_messages', String, queue_size=10)
 
     def on_welcome(self, connection, event):
-        connection.join("#fire")
+        connection.join(IRC_CHANNEL)
         
     def on_pubmsg(self, connection, event):
-        if event.target == "#fire":
+        if event.target == IRC_CHANNEL:
             msg_str = '{}: {}'.format(event.source.nick, event.arguments[0])
             rospy.loginfo(msg_str)
             self.pub.publish(msg_str)
@@ -27,5 +27,5 @@ class IrcSubscriber(irc.client.SimpleIRCClient):
 if __name__ == '__main__':
     rospy.init_node('irc_subscriber')
     client = IrcSubscriber()
-    client.connect("127.0.0.1", 6667, "ros-subscriber-bot")
+    client.connect(IRC_ADDRESS, IRC_PORT, "ros-subscriber-bot")
     client.start()
