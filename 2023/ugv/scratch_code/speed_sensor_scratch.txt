@@ -1,0 +1,64 @@
+// Use TimerOne Library by Paul Stoffregen -> INSTALL IF DONT HAVE
+#include "TimerOne.h"
+
+// Constants for Interrupt Pins
+// CHANGE VALUES IF NOT USING ARDUINO UNO
+
+const byte MOTOR1 = 2; // Motor 1 Interrupt Pin - INT 0
+const byte MOTOR2 = 3; // Motor 2 Interrupt Pin - INT 1
+
+// Integers to count disk pulses
+unsigned int counter1 = 0;
+unsigned inot counter2 = 0;
+
+// Float for number of slots in encoder disk
+float diskslots = 20.00; //CHANGE TO MATCH VALUE OF ENCODER DISK
+
+
+////////////////////////////////////////////////////////////
+// THIS PART IS IMPORTANT BUT I DONT KNOW HOW IT WORKS YET
+// NEED ISR FOR EACH MOTOR AS WELL AS THE TIME LIBRARY.
+
+// Interrupt Servive Routines
+
+// MOTOR 1 PULSE COUNT ISR
+void ISR_count(){
+  counter1++; //increment Motor 2 counter value
+}
+
+// Motor 2 Pulse count isr
+coid ISR_count2(){
+  counter2++; //inc. motor 2 counter val
+}
+
+//TimerOne ISR
+void ISR_timerone(){
+  Timer1.detachInterrupt(); // stop the timer
+  Serial.print("Motor Speed 1: ");
+  float rotation1 = (counter1/diskslots) * 60.00; // calc. RPM for motor1
+  Serial.print(rotation1);
+  Serial.print(""RPM - ");
+  counter1 = 0; //reset counter1 val
+
+  Serial.print("Motor Seep 2: ");
+  float rotation2 = (counter2/diskslots) * 60.00; //calc RPM for Motor2
+  Serial.print(rotation2);
+  Serial.print(" RPM");
+  counter2 = 0; // reset counter2 to zero
+  Timer1.attachInterrupt(ISR_timerone); //Enable the timer
+}
+
+void setup(){
+  Serial.begin(9600);
+  
+  // Attach the motors/timer to the ISR functions
+  Timer1.initialize(1000000); // set timer for 1 second
+  attachInterrupt(digitalPinToInterrupt (MOTOR1), ISR_count1, RISING); // inc counter1 when speed sensor pin goes HIGH
+  attachInterrupt(digitalPinToInterrupt (MOTR2), ISR_count2, RISING); // "" for counter2
+  Timer1.attachInterrupt(ISR_timerone); // Enable the timer
+}
+
+void loop(){
+  // code goes here
+}
+

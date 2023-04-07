@@ -1,0 +1,21 @@
+// scratch code for using motors with the motor controller
+
+#include <Servo.h>
+
+Servo esc_1; //create servo object to control the PWM signal
+
+void setup(){
+  esc_1.attach(9); // make sure to use a PWM capable pin
+}
+
+void loop(){
+  set_esc_power(esc_1, 0);
+}
+
+void set_esc_power(Servo esc, int power){
+  power = constrain(power, -100, 100); // 100 is full speed. negative is backwards.
+  int signal_min = 1050; // depends on motor controller
+  int signal_max = 1950; // depends on motor controller
+  int signal_output = map(power, -100, 100, signal_min, signal_max); // map(value, fromLow, fromHigh, toLow, toHigh)
+  esc.writeMicroseconds(signal_output);
+}
