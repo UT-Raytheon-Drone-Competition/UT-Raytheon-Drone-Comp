@@ -1,4 +1,4 @@
-#include <gnc_functions.hpp>
+#include <first_flight/gnc_functions.hpp>
 //include API 
 
 const double ALTITUDE = 2;

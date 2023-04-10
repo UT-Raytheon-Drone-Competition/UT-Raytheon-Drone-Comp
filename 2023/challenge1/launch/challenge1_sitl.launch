@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- Include the MAVROS node with SITL and Gazebo -->
+	<include file="$(find px4)/launch/mavros_posix_sitl.launch">
+        <arg name="world" value="/home/tar/catkin_ws/src/UT-Raytheon-Drone-Comp/worlds/football_field.world"/>
+        <arg name="verbose" value="true"/>
+	</include>
+
+	<!-- Our node to control the drone -->
+	<node pkg="challenge1" type="challenge1" name="challenge1_node" required="true" output="screen" />
+</launch>

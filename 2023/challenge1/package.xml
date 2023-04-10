@@ -54,6 +54,7 @@
   <build_depend>sensor_msgs</build_depend>
   <build_depend>mavros</build_depend>
   <build_depend>std_msgs</build_depend>
+  <build_depend>first_flight</build_depend>
   <build_export_depend>geometry_msgs</build_export_depend>
   <build_export_depend>mavros_msgs</build_export_depend>
   <build_export_depend>sensor_msgs</build_export_depend>
