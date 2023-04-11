@@ -19,16 +19,16 @@ struct speedCheckReturn{
 };
 
 speedCheckReturn MOTOR_FL_SPEED;
-MOTOR_FL_SPEED.totalSteps = 0;
-MOTOR_FL_SPEED.speedIndex = 0;
-MOTOR_FL_SPEED.units = "imperial"; 
-MOTOR_FL_SPEED.wheelDiameter = WD;
-MOTOR_FL_SPEED.stepsPerRotation = SPR;
 
 void setup() {
   // put your setup code here, to run once:
   pinMode(encoder1, INPUT); // set pin as digital in for encoder
   Serial.begin(9600);
+  MOTOR_FL_SPEED.totalSteps = 0;
+  MOTOR_FL_SPEED.speedIndex = 0;
+  MOTOR_FL_SPEED.units = "imperial"; 
+  MOTOR_FL_SPEED.wheelDiameter = WD;
+  MOTOR_FL_SPEED.stepsPerRotation = SPR;
 }
 
 void loop() {
