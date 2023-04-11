@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>challenge1</name>
+  <name>first_flight</name>
   <version>0.0.0</version>
   <description>The challenge1 package</description>
 
@@ -54,7 +54,6 @@
   <build_depend>sensor_msgs</build_depend>
   <build_depend>mavros</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_depend>first_flight</build_depend>
   <build_export_depend>geometry_msgs</build_export_depend>
   <build_export_depend>mavros_msgs</build_export_depend>
   <build_export_depend>sensor_msgs</build_export_depend>

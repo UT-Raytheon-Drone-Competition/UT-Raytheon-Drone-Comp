@@ -256,30 +256,15 @@ Wait for strat will hold the program until the user signals the FCU to enther mo
 */
 int wait4start()
 {
-  ROS_INFO("setting mode to OFFBOARD");
+  ROS_INFO("Waiting for OFFBOARD");
   // Send a few setpoints before starting
-  set_destination(0,0,2,0);
-  for(int i = 100; ros::ok() && i > 0; --i){
+  set_destination(0,0,0,0);
+  while(ros::ok() && current_state_g.mode != "OFFBOARD") {
     local_pos_pub.publish(waypoint_g);
-    // ros::spinOnce();
+    ros::spinOnce();
     ros::Duration(0.05).sleep();
   }
 
-  // Set drone to Offboard mode
-  mavros_msgs::SetMode offb_set_mode;
-  offb_set_mode.request.custom_mode = "OFFBOARD";
-
-  ros::Time last_request = ros::Time::now();
-
-  while(ros::ok() && current_state_g.mode != "OFFBOARD") {
-    if(current_state_g.mode != "OFFBOARD" && (ros::Time::now() - last_request > ros::Duration(5.0))) {
-      if(set_mode_client.call(offb_set_mode) && offb_set_mode.response.mode_sent){
-        ROS_INFO("Offboard enabled");
-      }
-      last_request = ros::Time::now();
-    }
-    ros::spinOnce();
-  }
   if(current_state_g.mode == "OFFBOARD") {
     ROS_INFO("Mode set to OFFBOARD. Mission starting");
     return 0;

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(challenge1)
+project(first_flight)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -14,8 +14,6 @@ find_package(catkin REQUIRED COMPONENTS
   mavros_msgs
   sensor_msgs
 )
-
-find_package(first_flight REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -122,7 +120,6 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ../../first_flight/include
 )
 
 ## Declare a C++ library
@@ -177,11 +174,11 @@ include_directories(
 # )
 
 ## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+  PATTERN ".svn" EXCLUDE
+)
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
@@ -206,8 +203,8 @@ include_directories(
 # Solutions 
 
 
-add_executable(challenge1 src/path.cpp)
-target_link_libraries(challenge1 ${catkin_LIBRARIES})
+add_executable(takeoff_and_land src/takeoff_and_land.cpp)
+target_link_libraries(takeoff_and_land ${catkin_LIBRARIES})
 
 #add_executable(sub_sol src/subscriber_sol.cpp)
 #target_link_libraries(sub_sol ${catkin_LIBRARIES})

@@ -1,4 +1,4 @@
-#include <gnc_functions.hpp>
+#include <first_flight/gnc_functions.hpp>
 //include API 
 
 const double ALTITUDE = 7.32;
@@ -19,11 +19,11 @@ int main(int argc, char** argv)
   // wait for FCU connection
   wait4connect();
 
-  //wait for used to switch to mode OFFBOARD
-  wait4start();
-
   //create local reference frame 
   initialize_local_frame();
+
+  //wait for used to switch to mode OFFBOARD
+  wait4start();
 
   //request takeoff
   takeoff(ALTITUDE);
