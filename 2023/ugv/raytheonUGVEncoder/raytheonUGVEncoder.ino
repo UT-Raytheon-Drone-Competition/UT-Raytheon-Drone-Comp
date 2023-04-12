@@ -8,16 +8,15 @@ struct speedCheckReturn{
   unsigned int encoderPin;        // pin number for encoder
 };
 
-//// 
-double wheelDiameter = 0.13;    // wheel diameter in meters
-double stepsPerRotation = 20.0; // number of slots in encoder wheel
-String units = "imperial";        // select "imperial", "metric", or "rotational"
-
+////
 speedCheckReturn MOTOR_FL_SPEED;  // speedCheckReturn init
 speedCheckReturn MOTOR_FR_SPEED;
 speedCheckReturn MOTOR_BL_SPEED;
 speedCheckReturn MOTOR_BR_SPEED;
-
+//// 
+double wheelDiameter = 0.13;    // wheel diameter in meters
+double stepsPerRotation = 20.0; // number of slots in encoder wheel
+String units = "imperial";        // select "imperial", "metric", or "rotational"
 unsigned int stepTimesLength = sizeof(MOTOR_FL_SPEED.stepTimes)/sizeof(MOTOR_FL_SPEED.stepTimes[0]); // length of stepTimes array
 // IMPORTANT: stepTimesLength determines number of rotations speed will be averaged over as (stepTimesLength/stepsPerRotation)
 
@@ -33,24 +32,20 @@ void setup() {
   
   MOTOR_FL_SPEED.lastEncoderState = digitalRead(MOTOR_FL_SPEED.encoderPin);  // Read the initial state of encoder1
 
-  attachInterrupt(digitalPinToInterrupt(MOTOR_FL_SPEED.encoderPin), updateEncoderFL, CHANGE);  // Call speedCheck1() when any high/low changed seen
+  attachInterrupt(digitalPinToInterrupt(MOTOR_FL_SPEED.encoderPin), updateEncoderFL, CHANGE);  // Call updateEncoder when any high/low changed seen
 }
 
 
 void loop() {
-  //Do some useful stuff here
   MOTOR_FL_SPEED = speedCheck(MOTOR_FL_SPEED);
-  //Serial.println(MOTOR_FL_SPEED.stepTimesIndex);
-  //Serial.print("Speed: ");Serial.println(MOTOR_FL_SPEED.currentSpeed);Serial.print("Odo: ");Serial.print(MOTOR_FL_SPEED.distanceTraveled);Serial.println("\n\n");
   Serial.print(MOTOR_FL_SPEED.currentSpeed); Serial.print("|||");Serial.print(MOTOR_FL_SPEED.stepTimesIndex); Serial.print("|||");Serial.println(MOTOR_FL_SPEED.stepTimes[MOTOR_FL_SPEED.stepTimesIndex]);  
-  //Serial.println();Serial.println(MOTOR_FL_SPEED.stepTimesIndex); Serial.println();
 }
 
 
 void updateEncoderFL(){
-  MOTOR_FL_SPEED = updateEncoderHelper(MOTOR_FL_SPEED);
+  MOTOR_FL_SPEED = updateEncoderHelper(MOTOR_FL_SPEED);   // call helper to update global vars outside ISR
 }
-speedCheckReturn updateEncoderHelper(speedCheckReturn UE){
+speedCheckReturn updateEncoderHelper(speedCheckReturn UE){  // update global vars
   int currentEncoderState = digitalRead(UE.encoderPin);   // Read the current state
   ////
   if (currentEncoderState != UE.lastEncoderState  && currentEncoderState == 1){    // If last and current state are different, then pulse occurred
