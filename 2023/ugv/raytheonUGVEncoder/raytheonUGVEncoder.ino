@@ -1,82 +1,99 @@
-// overall setup constants
-const int encoder1 = 18;    // encoder pin - must be interrupt capable (18,19,20,21 on mega)
-
-// variables used in program
-
-String units = "metric";        // select 'imperial' (MPH and feet) or 'metric' (mps and meters)
-double WD = 0.13;  // diameter of wheel in m
-int SPR = 20;      // number of openings in encoder wheel
-
 struct speedCheckReturn{
   double currentSpeed;
   double distanceTraveled;
-  unsigned long totalSteps;   // total steps triggered - important for persistent odometry
-  unsigned long stepTimes[2];   // array for tracking step times - must be declared externally so it is persistent trigger to trigger
-  unsigned int speedIndex;         // tracks the index of the time tracking array for speed calculations
-  String units;
-  double wheelDiameter;
-  int stepsPerRotation;
+  unsigned long totalSteps;       // total steps triggered - important for persistent odometry
+  unsigned long stepTimes[3];     // array for tracking step times - must be declared externally so it is persistent trigger to trigger
+  unsigned int stepTimesIndex;        // tracks the index of the time tracking array for speed calculations
+  unsigned int lastEncoderState;  // records previous encoder state
+  unsigned int encoderPin;        // pin number for encoder
 };
 
-speedCheckReturn MOTOR_FL_SPEED;
+//// 
+double wheelDiameter = 0.13;    // wheel diameter in meters
+double stepsPerRotation = 20.0; // number of slots in encoder wheel
+String units = "imperial";        // select "imperial", "metric", or "rotational"
+
+speedCheckReturn MOTOR_FL_SPEED;  // speedCheckReturn init
+speedCheckReturn MOTOR_FR_SPEED;
+speedCheckReturn MOTOR_BL_SPEED;
+speedCheckReturn MOTOR_BR_SPEED;
+
+unsigned int stepTimesLength = sizeof(MOTOR_FL_SPEED.stepTimes)/sizeof(MOTOR_FL_SPEED.stepTimes[0]); // length of stepTimes array
+// IMPORTANT: stepTimesLength determines number of rotations speed will be averaged over as (stepTimesLength/stepsPerRotation)
 
 void setup() {
-  // put your setup code here, to run once:
-  pinMode(encoder1, INPUT); // set pin as digital in for encoder
-  Serial.begin(9600);
-  MOTOR_FL_SPEED.totalSteps = 0;
-  MOTOR_FL_SPEED.speedIndex = 0;
-  MOTOR_FL_SPEED.units = "imperial"; 
-  MOTOR_FL_SPEED.wheelDiameter = WD;
-  MOTOR_FL_SPEED.stepsPerRotation = SPR;
+  Serial.begin(9600);  // Setup Serial Monitor
+
+  MOTOR_FL_SPEED.encoderPin = 18;  // Rotary Encoder Inputs
+  MOTOR_FR_SPEED.encoderPin = 19;
+  MOTOR_BL_SPEED.encoderPin = 20;
+  MOTOR_BR_SPEED.encoderPin = 21;
+  
+  pinMode(MOTOR_FL_SPEED.encoderPin,INPUT);  // Set encoder pins as inputs
+  
+  MOTOR_FL_SPEED.lastEncoderState = digitalRead(MOTOR_FL_SPEED.encoderPin);  // Read the initial state of encoder1
+
+  attachInterrupt(digitalPinToInterrupt(MOTOR_FL_SPEED.encoderPin), updateEncoderFL, CHANGE);  // Call speedCheck1() when any high/low changed seen
 }
+
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  attachInterrupt(digitalPinToInterrupt(encoder1), speedCheck1, CHANGE);
-}
-
-void speedCheck1(){
+  //Do some useful stuff here
   MOTOR_FL_SPEED = speedCheck(MOTOR_FL_SPEED);
+  //Serial.println(MOTOR_FL_SPEED.stepTimesIndex);
+  //Serial.print("Speed: ");Serial.println(MOTOR_FL_SPEED.currentSpeed);Serial.print("Odo: ");Serial.print(MOTOR_FL_SPEED.distanceTraveled);Serial.println("\n\n");
+  Serial.print(MOTOR_FL_SPEED.currentSpeed); Serial.print("|||");Serial.print(MOTOR_FL_SPEED.stepTimesIndex); Serial.print("|||");Serial.println(MOTOR_FL_SPEED.stepTimes[MOTOR_FL_SPEED.stepTimesIndex]);  
+  //Serial.println();Serial.println(MOTOR_FL_SPEED.stepTimesIndex); Serial.println();
 }
 
-speedCheckReturn speedCheck(speedCheckReturn SCR) {
-  //
-  double deltaT;
-  double currentRPS;  
+
+void updateEncoderFL(){
+  MOTOR_FL_SPEED = updateEncoderHelper(MOTOR_FL_SPEED);
+}
+speedCheckReturn updateEncoderHelper(speedCheckReturn UE){
+  int currentEncoderState = digitalRead(UE.encoderPin);   // Read the current state
+  ////
+  if (currentEncoderState != UE.lastEncoderState  && currentEncoderState == 1){    // If last and current state are different, then pulse occurred
+      UE.totalSteps++;
+      if (UE.stepTimesIndex == (stepTimesLength-1)){     // if at end of array, cycles back to pos 0 - FIFO array
+        UE.stepTimesIndex = 0;}
+      else{
+        UE.stepTimesIndex++;}
+      UE.stepTimes[UE.stepTimesIndex] = millis();
+      }
+  UE.lastEncoderState = currentEncoderState;  // Remember last encoder state
+  return UE;
+}
+
+
+speedCheckReturn speedCheck(speedCheckReturn SCR){
+  unsigned long deltaT;   
+  double currentRPS;      // current rotations per second
   double totalRotations;  // finds the number of rotations completed based on the number of encoder state changes that should occur per rotation
-  double travelPerRotation = SCR.wheelDiameter*PI;
-  int stepTimesLength = sizeof(SCR.stepTimes)/sizeof(SCR.stepTimes[0]); // length of stepTimes array
-  int changesPerRotation = SCR.stepsPerRotation*2;  // number of rising and falling edges per rotation
-  //
-  
-  //  
-  SCR.totalSteps++;
-
-  SCR.stepTimes[SCR.speedIndex] = millis();
-
-  if (SCR.speedIndex == (stepTimesLength-1)){   // if at end of array, cycles back to pos 0
-    deltaT = (SCR.stepTimes[SCR.speedIndex] - SCR.stepTimes[0]); // finds time difference (milliseconds) of (stepTimesLength) steps ago
-    SCR.speedIndex = 0;
+  double travelPerRotation = wheelDiameter*PI;  // distance traveled per wheel rotation
+  ////
+  totalRotations = SCR.totalSteps/stepsPerRotation;
+  ////
+  if (SCR.stepTimesIndex == (stepTimesLength-1)){         // finds time difference over one "revolution" of stepTimes
+    deltaT = SCR.stepTimes[SCR.stepTimesIndex] - SCR.stepTimes[0];    
+  } else {
+    deltaT = SCR.stepTimes[SCR.stepTimesIndex] - SCR.stepTimes[SCR.stepTimesIndex+1];
   }
-  else{
-    deltaT = (SCR.stepTimes[SCR.speedIndex] - SCR.stepTimes[SCR.speedIndex+1]); 
-    SCR.speedIndex++;
-  }
-  
-  totalRotations = SCR.totalSteps/changesPerRotation;
-  currentRPS = (stepTimesLength/changesPerRotation)/(deltaT/1000.0);   // finds current rotations per second
-  //
-  
-  //
-  if (SCR.units == "metric"){
+  currentRPS = (stepTimesLength/stepsPerRotation)/(deltaT/1000.0);
+  ////
+  if (units == "metric"){
     SCR.currentSpeed = currentRPS*travelPerRotation;      // speed in meters/second
     SCR.distanceTraveled = totalRotations*travelPerRotation;  // distance traveled in meters
   }
-  if (SCR.units == "imperial"){
+  if (units == "imperial"){
     SCR.currentSpeed = currentRPS*travelPerRotation*2.23694;      // speed in miles per hour
     SCR.distanceTraveled = totalRotations*travelPerRotation*3.28084;  // distance traveled in feet
   }
-  //
+  if (units == "rotational"){
+    SCR.currentSpeed = currentRPS/60.0;       // speed in rotations per minute
+    SCR.distanceTraveled = totalRotations;    // rotations completed
+  }
+  ////
+
   return SCR;
 }
