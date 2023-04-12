@@ -23,7 +23,7 @@ unsigned int stepTimesLength = sizeof(MOTOR_FL_SPEED.stepTimes)/sizeof(MOTOR_FL_
 void setup() {
   Serial.begin(9600);  // Setup Serial Monitor
 
-  MOTOR_FL_SPEED.encoderPin = 18;  // Rotary Encoder Inputs
+  MOTOR_FL_SPEED.encoderPin = 18;  // Rotary Encoder Inputs - must be 18, 19, 20, or 21 on MEGA for ISR enabled pins
   MOTOR_FR_SPEED.encoderPin = 19;
   MOTOR_BL_SPEED.encoderPin = 20;
   MOTOR_BR_SPEED.encoderPin = 21;
