@@ -1,13 +1,15 @@
 #include <first_flight/gnc_functions.hpp>
 //include API 
 
-const double ALTITUDE = 2;
-
 int main(int argc, char** argv)
 {
   //initialize ros 
   ros::init(argc, argv, "gnc_node");
   ros::NodeHandle gnc_node;
+
+  // Load parameters
+  double altitude;
+  gnc_node.param<double>("/altitude", altitude, 2.0);
   
   //initialize control publisher/subscribers
   init_publisher_subscriber(gnc_node);
@@ -22,7 +24,7 @@ int main(int argc, char** argv)
   wait4start();
 
   //request takeoff
-  takeoff(ALTITUDE);
+  takeoff(altitude);
   ros::Time takeoff_time = (ros::Time::now());
   ros::Rate rate(20);
   bool landing = false;
@@ -36,7 +38,7 @@ int main(int argc, char** argv)
           land();
           landing = true;
         } else {
-          set_destination(0,0, ALTITUDE, 0);
+          set_destination(0,0, altitude, 0);
         }
       }
     }

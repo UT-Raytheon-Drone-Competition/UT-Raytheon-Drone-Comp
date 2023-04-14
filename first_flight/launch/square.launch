@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 	<param name="altitude" type="double" value="2.0" />
+	<param name="square_size" type="double" value="2.0" />
 	<!-- Include the MAVROS node with SITL and Gazebo -->
 	<include file="$(find mavros)/launch/px4.launch">
 		<arg name="fcu_url" value="/dev/ttyUSB0:921600"/>
