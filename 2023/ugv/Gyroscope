@@ -1,4 +1,3 @@
-
 //Support
 ///////////////////////////////////////////////////////////////////////////////////////
 //Website: http://www.brokking.net/imu.html
@@ -40,6 +39,8 @@ float angle_pitch_output, angle_roll_output;
 
 
 
+
+
 void setup() {
   Wire.begin();                                                        //Start I2C as master
   Serial.begin(9600);                                               //Use only for debugging
@@ -55,9 +56,9 @@ void setup() {
     gyro_z_cal += gyro_z;                                              //Add the gyro z-axis offset to the gyro_z_cal variable
     delay(3);                                                          //Delay 3us to simulate the 250Hz program loop
   }
-  gyro_x_cal /= 2000;                                                  //Divide the gyro_x_cal variable by 2000 to get the avarage offset
-  gyro_y_cal /= 2000;                                                  //Divide the gyro_y_cal variable by 2000 to get the avarage offset
-  gyro_z_cal /= 2000;                                                  //Divide the gyro_z_cal variable by 2000 to get the avarage offset
+    gyro_x_cal /= 2000;                                                  //Divide the gyro_x_cal variable by 2000 to get the avarage offset
+    gyro_y_cal /= 2000;                                                  //Divide the gyro_y_cal variable by 2000 to get the avarage offset
+    gyro_z_cal /= 2000;                                                  //Divide the gyro_z_cal variable by 2000 to get the avarage offset
   
 
   
@@ -103,13 +104,16 @@ void loop(){
   }
   
   //To dampen the pitch and roll angles a complementary filter is used
-  angle_pitch_output = angle_pitch_output ]* 0.9 + angle_pitch * 0.1;   //Take 90% of the output pitch value and add 10% of the raw pitch value
+  angle_pitch_output = angle_pitch_output * 0.9 + angle_pitch * 0.1;   //Take 90% of the output pitch value and add 10% of the raw pitch value
   angle_roll_output = angle_roll_output * 0.9 + angle_roll * 0.1;      //Take 90% of the output roll value and add 10% of the raw roll value
-  Serial.print("Pitch: "); Serial.print(angle_pitch_output);Serial.print(" ||| Roll: "); Serial.println(angle_roll_output);
+  Serial.print("Pitch: "); Serial.print(angle_pitch_output*10.0);Serial.print(" ||| Roll: "); Serial.println(angle_roll_output*10.0);
 
 
   while(micros() - loop_timer < 4000);                                 //Wait until the loop_timer reaches 4000us (250Hz) before starting the next loop
   loop_timer = micros();                                               //Reset the loop timer
+                                                
+
+  
 }
 
 
@@ -145,7 +149,6 @@ void setup_mpu_6050_registers(){
   Wire.write(0x08);                                                    //Set the requested starting register
   Wire.endTransmission();                                              //End the transmission
 }
-
 
 
 
