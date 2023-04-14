@@ -37,8 +37,8 @@ float get_obstruction_distance(){
   digitalWrite(US_Trig, LOW);
 
   // init wave reading vars
-  duration = pulseIn(US_Echo, HIGH);
-  distance = duration*SPEED_OF_SOUND/2;
+  US_duration = pulseIn(US_Echo, HIGH);
+  US_distance = US_duration*SPEED_OF_SOUND/2;
 
-  return distance;  
+  return US_distance;  
 }
