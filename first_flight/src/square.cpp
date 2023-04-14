@@ -56,6 +56,7 @@ int main(int argc, char** argv)
     if(check_waypoint_reached(.3) == 1) {
       if (counter < waypointList.size())
         {
+          ROS_INFO("Going to next waypoint");
           set_destination(waypointList[counter].x,waypointList[counter].y,waypointList[counter].z, waypointList[counter].psi);
           counter++;
         }else{

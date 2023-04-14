@@ -8,5 +8,5 @@
 	</include>
 
 	<!-- Our node to control the drone -->
-	<node pkg="first_flight" type="takeoff_and_land" name="takeoff_and_land" required="true" output="screen" />
+	<node pkg="first_flight" type="square" name="square" required="true" output="screen" />
 </launch>
