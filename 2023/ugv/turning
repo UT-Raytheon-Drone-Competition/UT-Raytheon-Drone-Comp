@@ -1,7 +1,9 @@
-float angle = angle_pitch_output*10
+float angle = abs(angle_pitch_output*10.0 - beg_angle)
 float power = 20.0
 
+
 void turnRight(float dToGo, float dTraveled, float speed, float angle){
+  float beg_angle = 0
     if (angle < 90)
       set_esc_power(esc_FR, 0);
       set_esc_power(esc_BR, 0);
@@ -11,6 +13,7 @@ void turnRight(float dToGo, float dTraveled, float speed, float angle){
 }
 
 void turnLeft(float dToGo, float dTraveled, float speed, float angle){
+  float beg_angle = 0
     if (angle < 90)
       set_esc_power(esc_FL, 0);     
       set_esc_power(esc_BL, 0);
