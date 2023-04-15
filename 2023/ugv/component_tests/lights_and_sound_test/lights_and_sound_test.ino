@@ -38,3 +38,12 @@ void loop() {
   delay(1000);
   noTone(B3);
 }
+
+void CHECK_HIT() {
+  bool UGV_WAS_TAGGED;
+  if(digitalRead(12) == HIGH){
+    UGV_WAS_TAGGED = true;
+    }
+  else{
+    UGV_WAS_TAGGED = false;
+    }
