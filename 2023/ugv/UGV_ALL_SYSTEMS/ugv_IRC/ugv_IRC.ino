@@ -1,4 +1,3 @@
-
 #include <Servo.h>
 #include <RH_ASK.h>
 #include <SPI.h> // Not actually used but needed to compile
@@ -7,6 +6,7 @@
 //#include <XInput.h>
 #include <Ethernet.h>
 #include <IRCClient.h>
+#include <DS3231.h>
 
 #define IRC_SERVER   "web.libera.chat"
 #define IRC_PORT     6667
