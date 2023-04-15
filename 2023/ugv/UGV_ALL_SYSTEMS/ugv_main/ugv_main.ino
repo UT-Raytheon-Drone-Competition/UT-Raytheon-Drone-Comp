@@ -146,11 +146,10 @@ void loop() {
     //boolean buttonX = !digitalRead(BUTTON_X);
     //boolean dpadUp = !digitalRead(DPAD_UP);
     //boolean dpadDown = !digitalRead(DPAD_DOWN);
-
     //XInput.setButton(BUTTON_X, buttonX);
     //XInput.setDpad(dpadUp, dpadDown);    
 
-    updateDashboard();
+    //updateDashboard();
   }
 }
 
@@ -168,7 +167,7 @@ void obstacle2dash(){
   driver.waitPacketSent();
 }
 
-float get_obstruction_distance(){
+float get_obstruction_distance(){ // in cm
   // clear output of US sensor briefly
   digitalWrite(US_Trig, LOW);
   delayMicroseconds(2);
@@ -195,6 +194,7 @@ void updateTime(){
   deltaT = (currTime - prevTime)/1000;
 }
 
+/*
 void updateDashboard(){
   //String temp = "UGV Tag Status: " + String(UGV_WAS_TAGGED);
   //const char* dashTag = strToCharArr(temp);
@@ -235,27 +235,28 @@ void updateDashboard(){
 
   driver.send((uint8_t*)backSpeeds, strlen(backSpeeds));
   driver.waitPacketSent();
-  */
+  
   const char* str = "hello";
   driver.send((uint8_t*)str, strlen(str));
   driver.waitPacketSent();
 
   delay(200);
 }
+*/
 /*
 char strToCharArr(String str){
   /*int str_len = str.length() + 1;
   char char_array[str_len];
   str.toCharArray(char_array, str_len);
   return char_array;
-}*/
+}
 
 char floatToChar(float val){
   //dtostrf(float_value, min_width, num_digits_after_decimal, where_to_store_string);
   char char_array[8];
   dtostrf(val, 8, 2, char_array);
   return char_array;
-}
+}*/
 
 void goStraight(float dToGo, float dTraveled, float speed){
   if(dTraveled < dToGo){
@@ -304,8 +305,8 @@ void checkWheelsMatchSpeed(float speedWanted){
   // Sends command to correct wheels
   correctSpeedFL(speedWanted);
   correctSpeedFR(speedWanted);
-  correctSpeedBL(speedWanted);
-  correctSpeedBR(speedWanted);
+  //correctSpeedBL(speedWanted);
+  //correctSpeedBR(speedWanted);
 }
 
 void correctSpeedFL(float speedWanted){
@@ -346,8 +347,8 @@ void correctSpeedBR(float speedWanted){
 float getAvgSpeed(){
   float avg = MOTOR_FL_SPEED.currentSpeed;
   avg += MOTOR_FR_SPEED.currentSpeed;
-  avg += MOTOR_BL_SPEED.currentSpeed;
-  avg += MOTOR_BR_SPEED.currentSpeed;
+  //avg += MOTOR_BL_SPEED.currentSpeed;
+  //avg += MOTOR_BR_SPEED.currentSpeed;
   return avg/4;
 }
 
