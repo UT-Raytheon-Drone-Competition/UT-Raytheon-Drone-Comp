@@ -1,13 +1,13 @@
 #include <Servo.h>
-#include <RH_ASK.h>
+//#include <RH_ASK.h>
 #include <SPI.h> // Not actually used but needed to compile
 #include <stdio.h>
 //#include <XInput.h>
 
-#define MOTOR_FL 9
-#define MOTOR_FR 8
-#define MOTOR_BL 11
-#define MOTOR_BR 10
+#define MOTOR_FL 8
+#define MOTOR_FR 9
+#define MOTOR_BL 10
+#define MOTOR_BR 11
 
 #define ENCODER_FL 18
 #define ENCODER_FR 19
@@ -56,7 +56,7 @@ speedCheckReturn MOTOR_FR_SPEED;
 speedCheckReturn MOTOR_BL_SPEED;
 speedCheckReturn MOTOR_BR_SPEED;
 
-float WHEEL_SPEED_TOL = .1;
+float WHEEL_SPEED_TOL = .01;
 double wheelDiameter = 0.13;    // wheel diameter in meters
 double stepsPerRotation = 20.0; // number of slots in encoder wheel
 String units = "imperial";        // select "imperial", "metric", or "rotational"
@@ -64,13 +64,14 @@ unsigned int stepTimesLength = sizeof(MOTOR_FL_SPEED.stepTimes)/sizeof(MOTOR_FL_
 // IMPORTANT: stepTimesLength determines number of rotations speed will be averaged over as (stepTimesLength/stepsPerRotation)
 
 ////////// MISCELL. VARS //////////
-RH_ASK driver(2000, RECEIVER, TRANSMITTER, PTT); // transmitter init
+//RH_ASK driver(2000, RECEIVER, TRANSMITTER, PTT); // transmitter init
 
 bool UGV_WAS_TAGGED = false; // tag status
 bool UGV_WAS_KILLED = false; // kill switch
 
 float totalDistTraveled = 0.0; // distance counter
-float DISTANCE_TO_GO = 100.0; // in feet
+float DISTANCE_TO_GO = 150.0; // in feet
+float SPEED_TO_GO = .2; // MPH
 
 // time vars
 float prevTime; // in milliseconds
@@ -87,8 +88,10 @@ float OBSTACLE_THRESHOLD = 57.0; // cm
 // controller vars
 const int ADC_Max = 1023; // 10 bit
 
+
+
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   // init time
   currTime = millis();
@@ -112,9 +115,9 @@ void setup() {
   pinMode(US_Echo, INPUT);
 
   // Transmitter init
-  if(!driver.init()){
-    Serial.println("Transmitter Init. Failed.");
-  }
+  //if(!driver.init()){
+  //  Serial.println("Transmitter Init. Failed.");
+  //}
 
   //pinMode(DPAD_UP, INPUT_PULLUP);
   //pinMode(DPAD_DOWN, INPUT_PULLUP);
@@ -125,33 +128,12 @@ void setup() {
 }
 
 void loop() {
-  if(UGV_WAS_TAGGED){
-    allMotorsOff();
-    // SEND TAGGED IRC MESSAGE
-    playTaggedSequence();
-  }else if(UGV_WAS_KILLED){
-    allMotorsOff();
-    exit(0);
-  }else{
-    // CHECK IF TAGGED
-    goStraight(DISTANCE_TO_GO, totalDistTraveled, 20);
+  goStraight(DISTANCE_TO_GO, totalDistTraveled, 20);
 
-    // updates
-    updateTime(); // update time vars and deltaT
-    totalDistTraveled += getAvgSpeed() * deltaT; // // update distance traveled
-    if(OBSTACLE_DETECTION){
-      avoidObstacles();
-    }
-
-    //boolean buttonX = !digitalRead(BUTTON_X);
-    //boolean dpadUp = !digitalRead(DPAD_UP);
-    //boolean dpadDown = !digitalRead(DPAD_DOWN);
-
-    //XInput.setButton(BUTTON_X, buttonX);
-    //XInput.setDpad(dpadUp, dpadDown);    
-
-    updateDashboard();
-  }
+  Serial.println("FL: "+String(MOTOR_FL_SPEED.currentSpeed));
+  Serial.println("FR: "+String(MOTOR_FR_SPEED.currentSpeed));
+  Serial.println("BL: "+String(MOTOR_BL_SPEED.currentSpeed));
+  Serial.println("BR: "+String(MOTOR_BR_SPEED.currentSpeed));
 }
 
 void avoidObstacles(){
@@ -164,8 +146,8 @@ void avoidObstacles(){
 
 void obstacle2dash(){
   const char * obsTag = "Obstacle Detected!";
-  driver.send((uint8_t*)obsTag, strlen(obsTag));
-  driver.waitPacketSent();
+  //driver.send((uint8_t*)obsTag, strlen(obsTag));
+  //driver.waitPacketSent();
 }
 
 float get_obstruction_distance(){
@@ -194,40 +176,23 @@ void updateTime(){
   currTime = millis();
   deltaT = (currTime - prevTime)/1000;
 }
-
+/*
 void updateDashboard(){
-  //String temp = "UGV Tag Status: " + String(UGV_WAS_TAGGED);
-  //const char* dashTag = strToCharArr(temp);
-  //driver.send((uint8_t*)dashTag, strlen(dashTag));
-  //driver.waitPacketSent();
+  const char* dashTag1 = "UGV Tag Status: ";
+  const char* dashTag2 = 
+  String killTag = "UGV Kill Status: " + String(UGV_WAS_KILLED);
+  String dashSpeedHeader = "Speed:\n";
+  String frontSpeeds = "FL: " + String(MOTOR_FL_SPEED.currentSpeed) + "FR: " + String(MOTOR_FR_SPEED.currentSpeed);
+  String backSpeeds = "BL: " + String(MOTOR_BL_SPEED.currentSpeed) + "BR: " + String(MOTOR_BR_SPEED.currentSpeed);
 
-  //String temp = "UGV Kill Status: " + String(UGV_WAS_TAGGED);
-  //const char* killTag = strToCharArr(temp);
 
-  const char* tempf = floatToChar(totalDistTraveled);
-  //temp = "Distance Traveled: " + String(totalDistTraveled);
-  const char* temp = "Distance Traveled: ";
-  driver.send((uint8_t*)temp, strlen(temp));
-  driver.send((uint8_t*)tempf, strlen(tempf));
+  driver.send((uint8_t*)dashTag, strlen(dashTag));
   driver.waitPacketSent();
 
-  //const char* dist = strToCharArr(temp);
-
-
-  /*
-  temp = "Speed (MPH):\n    FL: "+ String(MOTOR_FL_SPEED.currentSpeed) +"  FR: "+ String(MOTOR_FR_SPEED.currentSpeed);
-  const char* frontSpeeds = strToCharArr(temp);
-
-  temp = "    BL: "+ String(MOTOR_BL_SPEED.currentSpeed) +"  BR: "+ String(MOTOR_BR_SPEED.currentSpeed);
-  const char* backSpeeds = strToCharArr(temp);
-
-  
-
-  /*
   driver.send((uint8_t*)killTag, strlen(killTag));
   driver.waitPacketSent();
 
-  driver.send((uint8_t*)dist, strlen(dist));
+  driver.send((uint8_t*)dashSpeedHeader, strlen(dashSpeedHeader));
   driver.waitPacketSent();
 
   driver.send((uint8_t*)frontSpeeds, strlen(frontSpeeds));
@@ -235,34 +200,15 @@ void updateDashboard(){
 
   driver.send((uint8_t*)backSpeeds, strlen(backSpeeds));
   driver.waitPacketSent();
-  */
-  const char* str = "hello";
-  driver.send((uint8_t*)str, strlen(str));
-  driver.waitPacketSent();
-
-  delay(200);
 }
-/*
-char strToCharArr(String str){
-  /*int str_len = str.length() + 1;
-  char char_array[str_len];
-  str.toCharArray(char_array, str_len);
-  return char_array;
-}*/
-
-char floatToChar(float val){
-  //dtostrf(float_value, min_width, num_digits_after_decimal, where_to_store_string);
-  char char_array[8];
-  dtostrf(val, 8, 2, char_array);
-  return char_array;
-}
+*/
 
 void goStraight(float dToGo, float dTraveled, float speed){
   if(dTraveled < dToGo){
-    //power = speed2power(speed);
+  //power = speed2power(speed);
     float power = 20.0;
     allMotorsConstant(power);
-    checkWheelsMatchSpeed(speed);
+  //checkWheelsMatchSpeed(speed);
   }
 }
 
@@ -305,7 +251,7 @@ void checkWheelsMatchSpeed(float speedWanted){
   correctSpeedFL(speedWanted);
   correctSpeedFR(speedWanted);
   correctSpeedBL(speedWanted);
-  correctSpeedBR(speedWanted);
+  //correctSpeedBR(speedWanted);
 }
 
 void correctSpeedFL(float speedWanted){
@@ -446,4 +392,3 @@ speedCheckReturn speedCheck(speedCheckReturn SCR){
   }
   return SCR;
 }
-
