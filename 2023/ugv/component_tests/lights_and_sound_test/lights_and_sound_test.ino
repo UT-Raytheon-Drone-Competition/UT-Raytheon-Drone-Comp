@@ -43,7 +43,11 @@ void CHECK_HIT() {
   bool UGV_WAS_TAGGED;
   if(digitalRead(12) == HIGH){
     UGV_WAS_TAGGED = true;
+    allMotorsOff();
+    // SEND TAGGED IRC MESSAGE
+    playTaggedSequence();
     }
   else{
     UGV_WAS_TAGGED = false;
+    goStraight(DISTANCE_TO_GO, totalDistTraveled, 20);
     }
