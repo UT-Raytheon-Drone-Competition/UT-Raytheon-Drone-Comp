@@ -53,15 +53,23 @@ int main(int argc, char** argv)
   {
     ros::spinOnce();
     rate.sleep();
-    if(check_waypoint_reached() == 1) {
-      if (counter < waypointList.size())
-        {
-          set_destination(waypointList[counter].x,waypointList[counter].y,waypointList[counter].z, waypointList[counter].psi);
-          counter++;
-          ROS_INFO("Going to waypoint (#%d)", counter);
-        }else{
-         //land after all waypoints are reached
-          land();
+    if(found_ugv()) {
+      ROS_INFO("Found UGV");
+      set_destination(waypointList[counter].x,waypointList[counter].y,waypointList[counter].z, waypointList[counter].psi);
+      fire_ace();
+    }
+    else{
+      turnoff_ace();
+      if(check_waypoint_reached() == 1) {
+        if (counter < waypointList.size())
+          {
+            set_destination(waypointList[counter].x,waypointList[counter].y,waypointList[counter].z, waypointList[counter].psi);
+            counter++;
+            ROS_INFO("Going to waypoint (#%d)", counter);
+          }else{
+          //land after all waypoints are reached
+            land();
+        }
       }
     }
   }

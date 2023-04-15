@@ -6,6 +6,8 @@
 #include <mavros_msgs/GlobalPositionTarget.h>
 #include <geographic_msgs/GeoPoseStamped.h>
 #include <mavros_msgs/State.h>
+#include <fiducial_msgs/FiducialTransformArray.h>
+#include <fiducial_msgs/FiducialTransform.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseStamped.h>
@@ -17,6 +19,7 @@
 #include <mavros_msgs/CommandBool.h>
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/PositionTarget.h>
+#include <mavros_msgs/OverrideRCIn.h>
 #include <unistd.h>
 #include <vector>
 #include <ros/duration.h>
@@ -43,13 +46,15 @@ float local_offset_g;
 float correction_heading_g = 0;
 float local_desired_heading_g; 
 
-
+bool saw_aruco_g = false;
 
 ros::Publisher local_pos_pub;
 ros::Publisher global_lla_pos_pub;
 ros::Publisher global_lla_pos_pub_raw;
+ros::Publisher fire_ace_pub;
 ros::Subscriber currentPos;
 ros::Subscriber state_sub;
+ros::Subscriber aruco_sub;
 ros::ServiceClient arming_client;
 ros::ServiceClient land_client;
 ros::ServiceClient set_mode_client;
@@ -74,6 +79,36 @@ void state_cb(const mavros_msgs::State::ConstPtr& msg)
 {
   current_state_g = *msg;
 }
+
+void aruco_cb(const fiducial_msgs::FiducialTransformArray::ConstPtr& msg)
+{
+  std::vector<fiducial_msgs::FiducialTransform> transforms = msg->transforms;
+  if(transforms.size() == 0){
+    saw_aruco_g = false;
+  }
+  else{
+    saw_aruco_g = true;
+  }
+}
+
+bool found_ugv(){
+  return saw_aruco_g;
+}
+
+void fire_ace(){
+  mavros_msgs::OverrideRCIn rc_msg;
+  rc_msg.channels[6] = 1898;
+  rc_msg.channels[7] = 1898;
+  fire_ace_pub.publish(rc_msg);
+}
+
+void turnoff_ace(){
+  mavros_msgs::OverrideRCIn rc_msg;
+  rc_msg.channels[6] = 0;
+  rc_msg.channels[7] = 0;
+  fire_ace_pub.publish(rc_msg);
+}
+
 geometry_msgs::Point enu_2_local(nav_msgs::Odometry current_pose_enu)
 {
   float x = current_pose_enu.pose.pose.position.x;
@@ -397,7 +432,7 @@ int takeoff(float takeoff_alt)
    @return 1 - waypoint reached 
    @return 0 - waypoint not reached
 */
-int check_waypoint_reached(float pos_tolerance=0.3, float heading_tolerance=0.01)
+int check_waypoint_reached(float pos_tolerance=1.0, float heading_tolerance=0.01)
 {
   local_pos_pub.publish(waypoint_g);
   
@@ -405,21 +440,21 @@ int check_waypoint_reached(float pos_tolerance=0.3, float heading_tolerance=0.01
   float deltaX = abs(waypoint_g.pose.position.x - current_pose_g.pose.pose.position.x);
   float deltaY = abs(waypoint_g.pose.position.y - current_pose_g.pose.pose.position.y);
   float deltaZ = 0; //abs(waypoint_g.pose.position.z - current_pose_g.pose.pose.position.z);
-  float dMag = sqrt( pow(deltaX, 2) + pow(deltaY, 2) + pow(deltaZ, 2) );
+  // float dMag = sqrt( pow(deltaX, 2) + pow(deltaY, 2) + pow(deltaZ, 2) );
   // ROS_INFO("dMag %f", dMag);
   // ROS_INFO("current pose x %F y %f z %f", (current_pose_g.pose.pose.position.x), (current_pose_g.pose.pose.position.y), (current_pose_g.pose.pose.position.z));
   // ROS_INFO("waypoint pose x %F y %f z %f", waypoint_g.pose.position.x, waypoint_g.pose.position.y,waypoint_g.pose.position.z);
   //check orientation
-  float cosErr = cos(current_heading_g*(M_PI/180)) - cos(local_desired_heading_g*(M_PI/180));
-  float sinErr = sin(current_heading_g*(M_PI/180)) - sin(local_desired_heading_g*(M_PI/180));
+  // float cosErr = cos(current_heading_g*(M_PI/180)) - cos(local_desired_heading_g*(M_PI/180));
+  // float sinErr = sin(current_heading_g*(M_PI/180)) - sin(local_desired_heading_g*(M_PI/180));
   
-  float headingErr = sqrt( pow(cosErr, 2) + pow(sinErr, 2) );
+  // float headingErr = sqrt( pow(cosErr, 2) + pow(sinErr, 2) );
   
   // ROS_INFO("current heading %f", current_heading_g);
   // ROS_INFO("local_desired_heading_g %f", local_desired_heading_g);
   // ROS_INFO("current heading error %f", headingErr);
   
-  if( dMag < pos_tolerance && headingErr < heading_tolerance)
+  if( dMag < pos_tolerance)// && headingErr < heading_tolerance)
     {
       return 1;
     }else{
@@ -580,9 +615,11 @@ int init_publisher_subscriber(ros::NodeHandle controlnode)
   }
   local_pos_pub = controlnode.advertise<geometry_msgs::PoseStamped>((ros_namespace + "/mavros/setpoint_position/local").c_str(), 10);
   global_lla_pos_pub = controlnode.advertise<geographic_msgs::GeoPoseStamped>((ros_namespace + "/mavros/setpoint_position/global").c_str(), 10);
+  fire_ace_pub = controlnode.advertise<mavros_msgs::OverrideRCIn>((ros_namespace + "/mavros/rc/override").c_str(), 10);
   global_lla_pos_pub_raw = controlnode.advertise<mavros_msgs::GlobalPositionTarget>((ros_namespace + "/mavros/setpoint_raw/global").c_str(), 10);
   currentPos = controlnode.subscribe<nav_msgs::Odometry>((ros_namespace + "/mavros/global_position/local").c_str(), 10, pose_cb);
   state_sub = controlnode.subscribe<mavros_msgs::State>((ros_namespace + "/mavros/state").c_str(), 10, state_cb);
+  aruco_sub = controlnode.subscribe<fiducial_msgs::FiducialTransformArray>((ros_namespace + "/fiducial_transforms").c_str(), 10, aruco_cb);
   arming_client = controlnode.serviceClient<mavros_msgs::CommandBool>((ros_namespace + "/mavros/cmd/arming").c_str());
   land_client = controlnode.serviceClient<mavros_msgs::CommandTOL>((ros_namespace + "/mavros/cmd/land").c_str());
   set_mode_client = controlnode.serviceClient<mavros_msgs::SetMode>((ros_namespace + "/mavros/set_mode").c_str());

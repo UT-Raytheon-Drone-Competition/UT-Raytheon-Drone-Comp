@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   mavros_msgs
   sensor_msgs
+  fiducial_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -205,8 +206,10 @@ install(DIRECTORY include/${PROJECT_NAME}/
 
 add_executable(takeoff_and_land src/takeoff_and_land.cpp)
 add_executable(square src/square.cpp)
+add_executable(square_and_detect src/square_and_detect.cpp)
 target_link_libraries(takeoff_and_land ${catkin_LIBRARIES})
 target_link_libraries(square ${catkin_LIBRARIES})
+target_link_libraries(square_and_detect ${catkin_LIBRARIES})
 
 #add_executable(sub_sol src/subscriber_sol.cpp)
 #target_link_libraries(sub_sol ${catkin_LIBRARIES})
