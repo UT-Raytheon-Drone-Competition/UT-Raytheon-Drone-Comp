@@ -44,10 +44,11 @@ void CHECK_HIT() {
   if(digitalRead(12) == HIGH){
     UGV_WAS_TAGGED = true;
     allMotorsOff();
-    // SEND TAGGED IRC MESSAGE
     playTaggedSequence();
+    Serial.print("TAGGED");   // SEND TAGGED IRC MESSAGE
     }
   else{
     UGV_WAS_TAGGED = false;
     goStraight(DISTANCE_TO_GO, totalDistTraveled, 20);
     }
+}
