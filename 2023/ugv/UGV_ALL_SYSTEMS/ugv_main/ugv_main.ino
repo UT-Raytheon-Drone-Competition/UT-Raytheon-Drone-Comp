@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <Wire.h> //Include LCD and I2C library
 //#include <XInput.h>
-#include<WiFi101.h>
+//#include<WiFi101.h>
 
 #define MOTOR_FL 9
 #define MOTOR_FR 8
@@ -36,11 +36,11 @@ Servo esc_FR;
 Servo esc_BL;
 Servo esc_BR;
 
-// modifier values for motor power
-float FL_POWER_MOD;
-float FR_POWER_MOD;
-float BL_POWER_MOD;
-float BR_POWER_MOD;
+// modifier values for motor power /////////////////////////////////////////////////////////////////////////// MODIFIER VALUES FOR UGV ///////////////////
+float FL_POWER_MOD = 0;
+float FR_POWER_MOD = 5;
+float BL_POWER_MOD = 0;
+float BR_POWER_MOD = 5;
 
 ////////// ENCODER VARS //////////
 struct speedCheckReturn{
@@ -102,6 +102,8 @@ float angle_roll_acc, angle_pitch_acc;
 float angle_pitch_output, angle_roll_output;
 float beg_angle = abs(angle_pitch_output*10.0);
 float power = 20.0;
+
+float UGV_POWER = 20; /////////////////////////////////////////////////////// added ugv_power value
 
 
 void setup() {
@@ -167,11 +169,12 @@ void loop() {
     exit(0);
   }else{
     CHECK_HIT();
-    //goStraight(DISTANCE_TO_GO, totalDistTraveled, 20);
+    
+    goStraight(DISTANCE_TO_GO, totalDistTraveled, UGV_POWER); // new var defined up top and set to 20
 
     // updates
-    //updateTime(); // update time vars and deltaT
-    //totalDistTraveled += getAvgSpeed() * deltaT; // // update distance traveled
+    updateTime(); // update time vars and deltaT
+    totalDistTraveled += getAvgSpeed() * deltaT; // // update distance traveled
     //if(OBSTACLE_DETECTION){
     //  avoidObstacles();
     //}
@@ -394,12 +397,11 @@ char floatToChar(float val){
   return char_array;
 }*/
 
-void goStraight(float dToGo, float dTraveled, float speed){
+void goStraight(float dToGo, float dTraveled, float power){
   if(dTraveled < dToGo){
     //power = speed2power(speed);
-    float power = 20.0;
-    allMotorsConstant(power);
-    checkWheelsMatchSpeed(speed);
+    allMotorsConstant(power); // all motors assigns power PLUS the manual modifier for that wheel.
+    //checkWheelsMatchSpeed(speed); // if check wheels is on and tries to correct speed it will change the modifier of the front wheels
   }
 }
 
