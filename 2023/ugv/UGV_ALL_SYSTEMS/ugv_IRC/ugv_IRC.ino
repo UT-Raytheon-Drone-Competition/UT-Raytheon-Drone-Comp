@@ -1,10 +1,28 @@
+
 #include <Servo.h>
 #include <RH_ASK.h>
 #include <SPI.h> // Not actually used but needed to compile
 #include <stdio.h>
 #include <Wire.h> //Include LCD and I2C library
 //#include <XInput.h>
-#include<WiFi101.h>
+#include <Ethernet.h>
+#include <IRCClient.h>
+
+#define IRC_SERVER   "web.libera.chat"
+#define IRC_PORT     6667
+#define IRC_NICKNAME "UT_UGV_RTX_SHOWCASE"
+#define IRC_USER     "UT_UGV_RTX_SHOWCASE"
+#define ircChannel "##DroneShowcase-1"
+
+// Enter a MAC address for your controller below.
+// Newer Ethernet shields have a MAC address printed on a sticker on the shield
+byte mac[] = { 43, 46, 30, 46, 45, 37, 39, 30, 35, 38, 31, 33};
+
+// Set the static IP address to use if the DHCP fails to assign
+//IPAddress ip(192, 168, 0, 177);
+
+EthernetClient ethernetClient;
+IRCClient client(IRC_SERVER, IRC_PORT, ethernetClient);
 
 #define MOTOR_FL 9
 #define MOTOR_FR 8
@@ -149,6 +167,8 @@ void setup() {
     Serial.println("Transmitter Init. Failed.");
   }
 
+  IRC_setup();  
+  client.sendMessage(ircChannel, "RTXDC_2023UT_UGV_Hit_0");
   //pinMode(DPAD_UP, INPUT_PULLUP);
   //pinMode(DPAD_DOWN, INPUT_PULLUP);
   //pinMode(BUTTON_X, INPUT_PULLUP);
@@ -160,13 +180,14 @@ void setup() {
 void loop() {
   if(UGV_WAS_TAGGED){
     allMotorsOff();
-    // SEND TAGGED IRC MESSAGE
+    client.sendMessage(ircChannel, "RTXDC_2023UT_UGV_Hit_0");
     playTaggedSequence();
   }else if(UGV_WAS_KILLED){
     allMotorsOff();
     exit(0);
   }else{
     CHECK_HIT();
+    IRC_loop();
     //goStraight(DISTANCE_TO_GO, totalDistTraveled, 20);
 
     // updates
@@ -184,6 +205,55 @@ void loop() {
 
     //updateDashboard();
   }
+}
+
+void callback(IRCMessage ircMessage) {
+  // PRIVMSG ignoring CTCP messages
+  if (ircMessage.command == "PRIVMSG" && ircMessage.text[0] != '\001') {
+    String message("<" + ircMessage.nick + "> " + ircMessage.text);
+    Serial.println(message);
+    return;
+  }
+  Serial.println(ircMessage.original);
+}
+
+void debugSentCallback(String data) {
+  Serial.println(data);
+}
+
+void IRC_setup(){
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+
+  // start the Ethernet connection:
+  if (Ethernet.begin(mac) == 0) {
+    Serial.println("Failed to configure Ethernet using DHCP");
+    // try to congifure using IP address instead of DHCP:
+    //Ethernet.begin(mac, ip);
+  }
+  // give the Ethernet shield a second to initialize:
+  delay(1000);
+
+  client.setCallback(callback);
+  client.setSentCallback(debugSentCallback);
+}
+
+void IRC_loop(){
+  if (!client.connected()) {
+    Serial.println("Attempting IRC connection...");
+    // Attempt to connect
+    if (client.connect(IRC_NICKNAME, IRC_USER)) {
+      Serial.println("connected");
+    } else {
+      Serial.println("failed... try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
+    return;
+  }
+
+  client.loop();
 }
 
 void CHECK_HIT(){
